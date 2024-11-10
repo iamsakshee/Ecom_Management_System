@@ -47,7 +47,20 @@ public class CustomerController {
 		
 	}
 	
-	
+	@GetMapping("/customer/zipcode/get")
+	public ResponseEntity<?> getCustomerByZipcode(@RequestParam String code)
+	{
+		try {
+		Integer zipcode = Integer.parseInt(code);
+		
+		List<Customer> list = customerService.getCustomerByZipcode(zipcode);
+		return ResponseEntity.ok(list);
+		}
+		catch(NumberFormatException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+	}
+
+}
 }
 
 

@@ -36,5 +36,10 @@ public class CustomerService {
 		
 	}
 
+	public List<Customer> getCustomerByZipcode(Integer zipcode) {
+	
+		return customerRepository.getCustomerByZipcode(zipcode);
+	}
+
 	
 }
