@@ -38,4 +38,13 @@ public class ShippingAddressService {
 		
 	}
 
+
+
+
+	public void deleteAddressbyCustomerId(int cid) {
+		
+		shippingAddressRepository.deleteAddressbyCustomerId(cid);
+		
+	}
+
 }

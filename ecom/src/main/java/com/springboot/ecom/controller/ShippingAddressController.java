@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +64,25 @@ public class ShippingAddressController {
 		return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+	
+	
+	@DeleteMapping("/address/delete/{cid}")
+	public ResponseEntity<?> deleteAddressbyCustomerId(@PathVariable int cid, ResponseMessageDto dto)
+	{
+		try {
+			customerService.validate(cid);
+			shippingAddressService.deleteAddressbyCustomerId(cid);
+		} catch (ResourceNotFoundException e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+		dto.setMsg("Shipping address deleted!!");
+		return ResponseEntity.ok(dto);
+	}
+	
+	
+
 	
 		
 }
