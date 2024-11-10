@@ -61,6 +61,32 @@ public class CustomerController {
 	}
 
 }
+	
+	
+	@PostMapping("/customer/update/{id}")
+	public ResponseEntity<?> updateCustomer(@PathVariable int id, @RequestBody Customer newcustomer, 
+											ResponseMessageDto dto)
+	{
+		try {
+			Customer existingCustomer = customerService.validate(id);
+			if(newcustomer.getName()!=null)
+				existingCustomer.setName(newcustomer.getName());
+			
+			if(newcustomer.getEmail()!=null)
+				existingCustomer.setEmail(newcustomer.getEmail());
+			
+			if(newcustomer.getPhoneNumber()!=null)
+				existingCustomer.setPhoneNumber(newcustomer.getPhoneNumber());
+			
+			existingCustomer = customerService.insertCustomer(existingCustomer);
+			return ResponseEntity.ok(existingCustomer);
+			
+			
+		} catch (ResourceNotFoundException e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+	}
 }
 
 
