@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.ecom.dto.ResponseMessageDto;
+import com.springboot.ecom.exception.DuplicateUserIdException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
 import com.springboot.ecom.model.User;
@@ -43,8 +44,15 @@ public class CustomerController {
 			}
 		
 		customer.setUser(user);
-		customerService.insertCustomer(customer);
-		return null;
+		try {
+			customerService.insertCustomer(customer);
+		} catch (DuplicateUserIdException e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+		dto.setMsg("Customer added successfully.");
+	    return ResponseEntity.ok(dto);
 		
 	}
 	
@@ -82,29 +90,31 @@ public class CustomerController {
 	
 	
 	@PutMapping("/customer/update/{id}")
-	public ResponseEntity<?> updateCustomer(@PathVariable int id, @RequestBody Customer newcustomer, 
-											ResponseMessageDto dto)
-	{
-		try {
-			Customer existingCustomer = customerService.validate(id);
-			if(newcustomer.getName()!=null)
-				existingCustomer.setName(newcustomer.getName());
-			
-			if(newcustomer.getEmail()!=null)
-				existingCustomer.setEmail(newcustomer.getEmail());
-			
-			if(newcustomer.getPhoneNumber()!=null)
-				existingCustomer.setPhoneNumber(newcustomer.getPhoneNumber());
-			
-			existingCustomer = customerService.insertCustomer(existingCustomer);
-			return ResponseEntity.ok(existingCustomer);
-			
-			
-		} catch (ResourceNotFoundException e) {
-			dto.setMsg(e.getMessage());
-			return ResponseEntity.badRequest().body(dto);
-		}
+	public ResponseEntity<?> updateCustomer(@PathVariable int id, @RequestBody Customer newCustomer, ResponseMessageDto dto) {
+	    try {
+	        Customer existingCustomer = customerService.validate(id);
+
+	        if (newCustomer.getName() != null) 
+	        	existingCustomer.setName(newCustomer.getName());
+	        
+	        if (newCustomer.getEmail() != null) 
+	        	existingCustomer.setEmail(newCustomer.getEmail());
+	        
+	        if (newCustomer.getPhoneNumber() != null) 
+	        	existingCustomer.setPhoneNumber(newCustomer.getPhoneNumber());
+
+	        existingCustomer = customerService.insertCustomer(existingCustomer);
+	        return ResponseEntity.ok(existingCustomer);
+
+	    } catch (DuplicateUserIdException e) {
+	        dto.setMsg(e.getMessage());
+	        return ResponseEntity.badRequest().body(dto);
+	    } catch (ResourceNotFoundException e) {
+	        dto.setMsg(e.getMessage());
+	        return ResponseEntity.badRequest().body(dto);
+	    }
 	}
+
 	
 	
 }

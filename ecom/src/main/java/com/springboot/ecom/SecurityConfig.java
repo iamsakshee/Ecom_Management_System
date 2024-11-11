@@ -36,7 +36,8 @@ public class SecurityConfig {
 				 	.requestMatchers(HttpMethod.GET, "/auth/login").authenticated()
 				 	.requestMatchers(HttpMethod.POST, "/auth/switch-status").hasAuthority("EXECUTIVE") 
 				 	.requestMatchers(HttpMethod.GET, "/api/hello").hasAuthority("CUSTOMER")                                     
-					.requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll()  
+					.requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll() 
+					.requestMatchers(HttpMethod.POST, "/customer/add/").hasAnyAuthority("CUSTOMER")
 				.anyRequest().permitAll()
 			) 
 			.httpBasic(Customizer.withDefaults());
