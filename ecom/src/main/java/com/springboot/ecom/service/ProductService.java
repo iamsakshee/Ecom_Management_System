@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,12 +38,33 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    public Set<Product> findProductsByVendor(int id)
-    {
+    public Product getProductById(int id) throws ResourceNotFoundException {
+        Optional<Product> optional = productRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new ResourceNotFoundException("Product id invalid");
+        }
+        return optional.get();
+    }
+
+    public Set<Product> findProductsByVendor(int id) {
         return productRepository.findProductsByVendor(id);
+    }
+
+    public Product updateProduct(Product existingProduct) {
+        return productRepository.save(existingProduct);
+    }
+
+    public void deleteById(int id) {
+        productRepository.deleteById(id);
+    }
+
+    public Set<Product> getProductsByCategoryId(int categoryId) {
+        Set<Product> products = productRepository.getAllProductsByCategoryId(categoryId);
+        return products;
     }
 }

@@ -31,4 +31,8 @@ public class VendorService {
         }
         return optional.get();
     }
+
+    public void deleteById(int id) {
+        vendorRepository.deleteById(id);
+    }
 }

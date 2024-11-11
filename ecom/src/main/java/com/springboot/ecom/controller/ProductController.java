@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class ProductController {
@@ -64,4 +65,63 @@ public class ProductController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/product/category/{categoryId}")
+    public ResponseEntity<?> getProductsByCategory(@PathVariable int categoryId, ResponseMessageDto dto)
+    {
+        try {
+            Set<Product> list = productService.getProductsByCategoryId(categoryId);
+            return ResponseEntity.ok(list);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/product/getProduct/{id}")
+    public ResponseEntity<Product> getProductsById(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(productService.getProductById(id));
+        } catch (ResourceNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping("/product/update/{productId}")
+    public ResponseEntity<?> updateProduct(@PathVariable int productId,
+                                           @RequestBody Product updatedProduct,
+                                           ResponseMessageDto dto) {
+        Product existingProduct = null;
+        try {
+            existingProduct = productService.getProductById(productId);
+        } catch (ResourceNotFoundException e) {
+            dto.setMsg("Product not found with id: " + productId);
+            return ResponseEntity.badRequest().body(dto);
+        }
+
+        if (updatedProduct.getName() != null) {
+            existingProduct.setName(updatedProduct.getName());
+        }
+        if (updatedProduct.getPrice() > 0) {
+            existingProduct.setPrice(updatedProduct.getPrice());
+        }
+        if (updatedProduct.getStock() >= 0) {
+            existingProduct.setStock(updatedProduct.getStock());
+        }
+
+        Product updated = productService.updateProduct(existingProduct);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("product/delete/{id}")
+    public ResponseEntity<?> deleteVendor(@PathVariable int id, ResponseMessageDto dto)
+    {
+        try {
+            productService.getProductById(id);
+            productService.deleteById(id);
+        } catch (ResourceNotFoundException e) {
+            dto.setMsg(dto.getMsg());
+            return ResponseEntity.badRequest().body(dto);
+        }
+        dto.setMsg("Product deleted");
+        return ResponseEntity.ok(dto);
+    }
 }

@@ -25,5 +25,4 @@ public class CategoryService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + id));
     }
-
 }
