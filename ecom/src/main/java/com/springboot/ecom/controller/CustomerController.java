@@ -3,6 +3,7 @@ package com.springboot.ecom.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +17,35 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.ecom.dto.ResponseMessageDto;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
+import com.springboot.ecom.model.User;
 import com.springboot.ecom.service.CustomerService;
+import com.springboot.ecom.service.UserService;
 
 @RestController
 public class CustomerController {
 	
 	@Autowired
-	
 	private CustomerService customerService;
 	
-	@PostMapping("/customer/add")
-	public Customer insertCustomer(@RequestBody Customer customer)
+	@Autowired
+	private UserService userService;
+	
+	@PostMapping("/customer/add/{uid}")
+	public ResponseEntity<?> insertCustomer(@PathVariable int uid, @RequestBody Customer customer, ResponseMessageDto dto)
 	{
-		return customerService.insertCustomer(customer);
+		
+		User user = null;
+		try {
+			user = userService.validate(uid);
+		} catch (ResourceNotFoundException e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+			}
+		
+		customer.setUser(user);
+		customerService.insertCustomer(customer);
+		return null;
+		
 	}
 	
 	@DeleteMapping("/customer/delete/{id}")
