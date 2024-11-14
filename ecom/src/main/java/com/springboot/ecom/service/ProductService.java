@@ -2,6 +2,7 @@ package com.springboot.ecom.service;
 
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Category;
+import com.springboot.ecom.model.Customer;
 import com.springboot.ecom.model.Product;
 import com.springboot.ecom.model.Vendor;
 import com.springboot.ecom.repository.ProductRepository;
@@ -67,4 +68,15 @@ public class ProductService {
         Set<Product> products = productRepository.getAllProductsByCategoryId(categoryId);
         return products;
     }
+
+	public Product validate(int id) throws ResourceNotFoundException {
+		Optional<Product> optional = productRepository.findById(id);
+		if (optional.isEmpty())
+			throw new ResourceNotFoundException("Customer id is invalid");
+
+		return optional.get();
+		
+	}
+
+
 }

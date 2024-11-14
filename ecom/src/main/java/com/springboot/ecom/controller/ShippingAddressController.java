@@ -82,6 +82,11 @@ public class ShippingAddressController {
 	}
 	
 	
+	
+	// update
+	// get all shipping addresses by customer
+	
+	
 
 	
 		

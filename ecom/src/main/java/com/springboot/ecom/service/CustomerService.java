@@ -17,20 +17,7 @@ public class CustomerService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	public Customer insertCustomer(Customer customer) throws DuplicateUserIdException {
-
-		Optional<Customer> existingCustomerByUser = customerRepository.findByUser(customer.getUser());
-
-		if (existingCustomerByUser.isPresent() && existingCustomerByUser.get().getId() != customer.getId()) {
-			throw new DuplicateUserIdException("User ID is already in use by another customer.");
-		}
-
-		Optional<Customer> existingCustomerByEmail = customerRepository.findByEmail(customer.getEmail());
-
-		if (existingCustomerByEmail.isPresent() && existingCustomerByEmail.get().getId() != customer.getId()) {
-			throw new DuplicateUserIdException("Email is already in use by another customer.");
-		}
-
+	public Customer insertCustomer(Customer customer) {
 		return customerRepository.save(customer);
 	}
 
@@ -52,6 +39,11 @@ public class CustomerService {
 	public List<Customer> getCustomerByZipcode(Integer zipcode) {
 
 		return customerRepository.getCustomerByZipcode(zipcode);
+	}
+
+	public void addCustomer(Customer customer) {
+		customerRepository.save(customer);
+
 	}
 
 }

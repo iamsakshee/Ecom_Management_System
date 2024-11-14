@@ -1,5 +1,8 @@
 package com.springboot.ecom.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ResponseMessageDto {
 	
 	private String msg;

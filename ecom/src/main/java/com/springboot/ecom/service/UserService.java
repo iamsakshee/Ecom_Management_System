@@ -22,7 +22,6 @@ public class UserService {
 	private BCryptPasswordEncoder passEncoder;
 
 	public User signUp(User user) throws InvalidUsernameException {
-		// check for username duplicacy
 		Optional<User> optional = userRepository.findByUsername(user.getUsername());
 		if (optional.isPresent()) {
 			throw new InvalidUsernameException("Username already in use");
