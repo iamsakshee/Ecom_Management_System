@@ -4,6 +4,7 @@ import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Category;
 import com.springboot.ecom.model.Product;
 import com.springboot.ecom.model.Vendor;
+import com.springboot.ecom.repository.CategoryRepository;
 import com.springboot.ecom.repository.ProductRepository;
 import com.springboot.ecom.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class ProductService {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public Product addProductWithVendorAndCategory(Product product, Vendor vendor, int categoryId) throws ResourceNotFoundException {
         Category category = categoryService.getCategoryById(categoryId);
@@ -51,9 +54,18 @@ public class ProductService {
         return optional.get();
     }
 
-    public Set<Product> findProductsByVendor(int id) {
-        return productRepository.findProductsByVendor(id);
+    public Set<Product> findProductsByVendor(int id) throws ResourceNotFoundException {
+        Vendor vendor = vendorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found with id: " + id));
+
+        Set<Product> products = productRepository.findProductsByVendor(id);
+
+        if (products == null || products.isEmpty()) {
+            throw new ResourceNotFoundException("No products found for vendor with id: " + id);
+        }
+        return products;
     }
+
 
     public Product updateProduct(Product existingProduct) {
         return productRepository.save(existingProduct);
@@ -63,8 +75,31 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Set<Product> getProductsByCategoryId(int categoryId) {
+    public Set<Product> getProductsByCategoryId(int categoryId) throws ResourceNotFoundException {
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category invalid "));
+
         Set<Product> products = productRepository.getAllProductsByCategoryId(categoryId);
+        if (products == null || products.isEmpty()) {
+            throw new ResourceNotFoundException("No products found for this category ");
+        }
         return products;
     }
+
+    public Set<Product> getAllProductsByVendor(int vendorId) throws ResourceNotFoundException {
+
+        Vendor vendor = vendorRepository.findById(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found with id: " + vendorId));
+
+        Set<Product> products = productRepository.findProductsByVendor(vendorId);
+
+        if (products == null || products.isEmpty()) {
+            throw new ResourceNotFoundException("No products found for vendor with id: " + vendorId);
+        }
+        return products;
+
+    }
+
+
 }

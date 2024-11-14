@@ -3,12 +3,15 @@ package com.springboot.ecom.controller;
 import com.springboot.ecom.dto.ResponseMessageDto;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Product;
+import com.springboot.ecom.model.User;
 import com.springboot.ecom.model.Vendor;
 import com.springboot.ecom.service.CategoryService;
 import com.springboot.ecom.service.ProductService;
+import com.springboot.ecom.service.UserService;
 import com.springboot.ecom.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,10 +29,17 @@ public class VendorController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/vendor/add")
-    public ResponseEntity<?> addVendor(@RequestBody Vendor vendor) {
-        Vendor savedVendor = vendorService.addVendor(vendor);
-        return ResponseEntity.ok(savedVendor);
+    public ResponseEntity<?> addVendor(@RequestBody Vendor vendor, ResponseMessageDto dto) throws ResourceNotFoundException {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(username);
+        vendor.setUser(user);
+        vendorService.addVendor(vendor);
+        return ResponseEntity.ok(vendor);
     }
 
     @GetMapping("/vendor/all")
@@ -39,56 +49,42 @@ public class VendorController {
     }
 
     @GetMapping("/vendor/{id}")
-    public ResponseEntity<?> getVendorById(@PathVariable int id) {
-        try {
-            Vendor vendor = vendorService.getVendorById(id);
-            return ResponseEntity.ok(vendor);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> getVendorById(@PathVariable int id) throws ResourceNotFoundException {
+        Vendor vendor = vendorService.getVendorById(id);
+        return ResponseEntity.ok(vendor);
     }
 
     @GetMapping("/vendor/getProducts/{id}")
-    public ResponseEntity<Set<Product>> getProductsByVendorId(@PathVariable int id) {
-        return ResponseEntity.ok(productService.findProductsByVendor(id));
+    public ResponseEntity<?> getProductsByVendorId(@PathVariable int id) throws ResourceNotFoundException {
+        Set<Product> products = productService.findProductsByVendor(id);
+        return ResponseEntity.ok(products);
     }
+
 
     @PutMapping("/vendor/update/{id}")
-    public ResponseEntity<?> updateVendor(@PathVariable int id, @RequestBody Vendor newVendor, ResponseMessageDto dto) {
-        try {
-            Vendor existingVendor = vendorService.getVendorById(id);
-            if (newVendor.getCompany_name() != null) {
-                existingVendor.setCompany_name(newVendor.getCompany_name());
-            }
-            if (newVendor.getEmail() != null) {
-                existingVendor.setEmail(newVendor.getEmail());
-            }
-            if (newVendor.getPhone() != null) {
-                existingVendor.setPhone(newVendor.getPhone());
-            }
-            if (newVendor.getAddress() != null) {
-                existingVendor.setAddress(newVendor.getAddress());
-            }
-            existingVendor = vendorService.addVendor(existingVendor);
-            return ResponseEntity.ok(existingVendor);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg(e.getMessage());
-            return ResponseEntity.badRequest().body(dto);
+    public ResponseEntity<?> updateVendor(@PathVariable int id, @RequestBody Vendor newVendor) throws ResourceNotFoundException {
+        Vendor existingVendor = vendorService.getVendorById(id);
+        if (newVendor.getCompany_name() != null) {
+            existingVendor.setCompany_name(newVendor.getCompany_name());
         }
+        if (newVendor.getEmail() != null) {
+            existingVendor.setEmail(newVendor.getEmail());
+        }
+        if (newVendor.getPhone() != null) {
+            existingVendor.setPhone(newVendor.getPhone());
+        }
+        if (newVendor.getAddress() != null) {
+            existingVendor.setAddress(newVendor.getAddress());
+        }
+        existingVendor = vendorService.saveVendor(existingVendor);
+        return ResponseEntity.ok(existingVendor);
     }
+
 
     @DeleteMapping("vendor/delete/{id}")
-    public ResponseEntity<?> deleteVendor(@PathVariable int id, ResponseMessageDto dto)
-    {
-        try {
-            vendorService.getVendorById(id);
-            vendorService.deleteById(id);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg(dto.getMsg());
-            return ResponseEntity.badRequest().body(dto);
-        }
-        dto.setMsg("Vendor deleted");
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<?> deleteProduct(@PathVariable int id) throws ResourceNotFoundException {
+        vendorService.getVendorById(id);
+        vendorService.deleteById(id);
+        return ResponseEntity.ok("Vendor deleted");
     }
-
 }

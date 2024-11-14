@@ -13,8 +13,14 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public Category createCategory(Category category) throws Exception {
+        try {
+            return categoryRepository.save(category);
+        }
+        catch (Exception e)
+        {
+            throw new Exception("category with this name already exists... ");
+        }
     }
 
     public List<Category> getAllCategories() {
