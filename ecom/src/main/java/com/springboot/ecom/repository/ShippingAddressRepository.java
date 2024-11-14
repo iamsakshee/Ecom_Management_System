@@ -24,6 +24,9 @@ public interface ShippingAddressRepository extends JpaRepository<ShippingAddress
 	@Query("DELETE FROM ShippingAddress sa WHERE sa.customer.id = ?1 ")
 	void deleteAddressbyCustomerId(int cid);
 
-	
+
+
+	@Query("select sa from ShippingAddress sa where sa.customer.id = ?1")
+	ShippingAddress findByCustomerId(int customerId);
 
 }

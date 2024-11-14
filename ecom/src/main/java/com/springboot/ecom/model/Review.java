@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
@@ -12,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 public class Review {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
 	private double rating;
@@ -24,7 +27,8 @@ public class Review {
 	@ManyToOne
 	private Customer customer;
 	
-	//private Product product;
+	@ManyToOne
+	private Product product;
 
 	public int getId() {
 		return id;
@@ -64,6 +68,16 @@ public class Review {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+	
+	
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	@Override

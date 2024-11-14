@@ -20,15 +20,8 @@ public class CustomerProductController {
 	    public List<OrderResponseDto> getAllOrdersWithCustomerAndProductDetails() {
 	        return customerProductService.getAllOrdersWithCustomerAndProductDetails();
 	    }
-	
-//	@GetMapping("/get-all/customer/product")
-//	public List<OrderResponseDto> getAllOrdersWithCustomerAndProductDetails() 
-//	 {
-//		List<OrderResponseDto> list 
-//				=  customerProductService.getAllOrdersWithCustomerAndProductDetails();
-//		return list;
-//		
-//		
-//	}
+
+	 
+	 
 
 }

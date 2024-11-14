@@ -82,9 +82,21 @@ public class ShippingAddressController {
 	}
 	
 	
+	@GetMapping("/customer/address/{customerId}")
+	public ResponseEntity<?> getShippingAddressByCustomerId(@PathVariable int customerId, ResponseMessageDto dto) throws ResourceNotFoundException {
+
+        ShippingAddress shippingAddress;
+        Customer customer = null;
+        customer = customerService.validate(customerId);
+        
+        shippingAddress = shippingAddressService.findByCustomerId(customerId);
+        return ResponseEntity.ok(shippingAddress);
+      
+    }
+	
+	
 	
 	// update
-	// get all shipping addresses by customer
 	
 	
 
