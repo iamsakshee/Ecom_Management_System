@@ -3,9 +3,9 @@ package com.springboot.ecom.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.springboot.ecom.model.User;
+import com.springboot.ecom.model.Delivery;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByUsername(String username);
+public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
+
 }
