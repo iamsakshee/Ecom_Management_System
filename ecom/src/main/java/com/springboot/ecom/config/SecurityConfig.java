@@ -31,11 +31,10 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/api/token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/hello").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/admin/**").hasAuthority("EXECUTIVE")
-                        .requestMatchers(HttpMethod.POST, "/auth/switch-status/{id}").hasAuthority("EXECUTIVE")
+                        .requestMatchers("/admin/**").hasAuthority("EXECUTIVE")
                         .requestMatchers("/vendor/**").hasAuthority("VENDOR")
                         .requestMatchers("/products/**", "/category/**").hasAuthority("VENDOR")
 

@@ -98,8 +98,5 @@ public class ProductService {
             throw new ResourceNotFoundException("No products found for vendor with id: " + vendorId);
         }
         return products;
-
     }
-
-
 }

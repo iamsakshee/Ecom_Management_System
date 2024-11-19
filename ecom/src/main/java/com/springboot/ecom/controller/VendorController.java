@@ -80,7 +80,6 @@ public class VendorController {
         return ResponseEntity.ok(existingVendor);
     }
 
-
     @DeleteMapping("vendor/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id) throws ResourceNotFoundException {
         vendorService.getVendorById(id);

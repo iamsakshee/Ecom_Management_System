@@ -9,12 +9,16 @@ public class Product {
     private int id;
 
     private String name;
+
+    @Column(length = 500)
+    private String description;
+
     private double price;
     private int stock;
-
     @ManyToOne
     @JoinColumn(name = "vendor_id")
     private Vendor vendor;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -33,6 +37,14 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getPrice() {

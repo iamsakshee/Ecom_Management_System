@@ -4,7 +4,6 @@ import com.springboot.ecom.enums.Role;
 import com.springboot.ecom.exception.InvalidUsernameException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.User;
-import com.springboot.ecom.model.Vendor;
 import com.springboot.ecom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

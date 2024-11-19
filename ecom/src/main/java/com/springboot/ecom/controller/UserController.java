@@ -44,6 +44,4 @@ public class UserController {
         User savedUser = userService.signup(user);
         return ResponseEntity.ok(savedUser);
     }
-
-
 }
