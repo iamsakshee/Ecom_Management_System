@@ -31,6 +31,7 @@ public class SecurityConfig {
 		 .csrf((csrf) -> csrf.disable())
 		 .authorizeHttpRequests(authorize -> authorize
 				 	.requestMatchers(HttpMethod.POST, "/api/token").permitAll()
+				 	.requestMatchers(HttpMethod.GET, "/auth/user").authenticated()
 				 	 .requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll() 
 				 	 .requestMatchers(HttpMethod.GET, "/api/hello").authenticated()
 				 	.requestMatchers("/manager/**", "/delivery/**","/warehouse/**","/shipment/**").hasAuthority("MANAGER")

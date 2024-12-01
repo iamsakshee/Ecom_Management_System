@@ -14,6 +14,8 @@ import jakarta.persistence.Id;
 		@Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
 	    private int id;
+		
+		//delivery to
 	    
 	    @Column(nullable = false, unique = true)
 	    private String deliveryPerson;

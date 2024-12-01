@@ -18,8 +18,8 @@ import com.springboot.ecom.repository.ShipmentRepository;
 		
 		public Shipment insert(Shipment shipment) {
 			return shipmentRepository.save(shipment);
-			
 		}
+	
 
 		public List<Shipment> getAllShipment() {
 			 
@@ -39,5 +39,15 @@ import com.springboot.ecom.repository.ShipmentRepository;
 			return optional.get();
 			
 		}
+
+		 public Shipment getShipment(int id) {
+		        return shipmentRepository.findById(id).orElse(null);
+		    }
+
+//
+//		public Shipment getShipmentByid(int id) {
+//			return shipmentRepository.findById(id).get();
+//		}
+
 }
 

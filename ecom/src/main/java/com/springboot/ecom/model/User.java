@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user_info")
-public class User implements UserDetails {
+public class User implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,6 +31,9 @@ public class User implements UserDetails {
 
 	@Column(nullable = false)
 	private String username;
+
+	@Column(nullable = false)
+	private String name;
 
 	@Column(nullable = false)
 	private String password;
@@ -63,7 +66,15 @@ public class User implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public Role getRole() {
 		return role;
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,11 @@ import com.springboot.ecom.model.Shipment;
 import com.springboot.ecom.service.ShipmentService;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class ShipmentController {
+	
+	@Autowired
+	private ResponseMessageDto responseMessageDto;
 
 	@Autowired
 	private ShipmentService shipmentService;
@@ -28,11 +33,23 @@ public class ShipmentController {
 		return shipmentService.insert(shipment);
 	}
 	
+	@GetMapping("/shipment/{id}")
+    public ResponseEntity<?> getShipment(@PathVariable int id) {
+        Shipment shipment = shipmentService.getShipment(id);
+        if (shipment != null) {
+            return ResponseEntity.ok(shipment); 
+        } else {
+            responseMessageDto.setMsg("Shipment Not Found");
+            return ResponseEntity.badRequest().body(responseMessageDto); 
+        }
+    }
+	
 	@GetMapping("/shipment/all")
 	public List<Shipment> getAllShipment() {
 		List<Shipment> list = shipmentService.getAllShipment();
 		return list;
 	}
+
 	
 	@DeleteMapping("/shipment/delete/{id}")
 	public ResponseEntity<?> deleteShipment(@PathVariable int id, ResponseMessageDto dto) {

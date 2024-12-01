@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.springboot.ecom.enums.Role;
 import com.springboot.ecom.exception.InvalidUsernameException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.User;
@@ -30,6 +31,7 @@ public class UserService {
 		String encryptedPass = passEncoder.encode(user.getPassword());
 		user.setPassword(encryptedPass);
 		
+		user.setRole(Role.MANAGER);
 		
 		return userRepository.save(user);
 	}
