@@ -12,16 +12,16 @@ public class Vendor {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String company_name;
+    private String companyName;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false, unique = true)
     private String phone;
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = false)
     private String address;
 
-    @Column(unique = true)
-    private String gstNo;
+    @Column(unique = true, nullable = false)
+    private String gstNumber;
 
     private LocalDate registrationDate;
 
@@ -56,12 +56,12 @@ public class Vendor {
         this.name = name;
     }
 
-    public String getCompany_name() {
-        return company_name;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany_name(String company_name) {
-        this.company_name = company_name;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getEmail() {
@@ -88,12 +88,12 @@ public class Vendor {
         this.address = address;
     }
 
-    public String getGstNo() {
-        return gstNo;
+    public String getGstNumber() {
+        return gstNumber;
     }
 
     public void setGstNo(String gstNo) {
-        this.gstNo = gstNo;
+        this.gstNumber = gstNo;
     }
 
     public LocalDate getRegistrationDate() {
@@ -104,14 +104,14 @@ public class Vendor {
         this.registrationDate = registrationDate;
     }
 
-    public Vendor(int id, String name, String company_name, String email, String phone, String address, String gstNo, LocalDate registrationDate) {
+    public Vendor(int id, String name, String companyName, String email, String phone, String address, String gstNumber, LocalDate registrationDate) {
         this.id = id;
         this.name = name;
-        this.company_name = company_name;
+        this.companyName = companyName;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.gstNo = gstNo;
+        this.gstNumber = gstNumber;
         this.registrationDate = registrationDate;
     }
 }

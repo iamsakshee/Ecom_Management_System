@@ -3,6 +3,7 @@ package com.springboot.ecom.config;
 
 import com.springboot.ecom.JwtFilter;
 import com.springboot.ecom.service.UserSecurityService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,15 +34,32 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/hello").authenticated()
-                        .requestMatchers("/admin/**").hasAuthority("EXECUTIVE")
-                        .requestMatchers("/vendor/**").hasAuthority("VENDOR")
-                        .requestMatchers("/products/**", "/category/**").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.GET, "/auth/user").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/admin/auth/switch-status/{id}").hasAuthority("EXECUTIVE")
+                        .requestMatchers(HttpMethod.POST,"/admin/getAllUsers").hasAuthority("EXECUTIVE")
+                        .requestMatchers(HttpMethod.GET,"/admin/getAllProducts").hasAuthority("EXECUTIVE")
+                        .requestMatchers(HttpMethod.GET,"/admin/getFeaturedProducts").hasAuthority("EXECUTIVE")
+                        .requestMatchers(HttpMethod.PUT,"/admin/approve/product/{productId}").hasAuthority("EXECUTIVE")
+                        .requestMatchers(HttpMethod.DELETE,"/vendor/delete/{id}").hasAuthority("EXECUTIVE")
+//                        .requestMatchers(HttpMethod.PUT,"/admin/auth/switch-status/{id}").hasAuthority("EXECUTIVE")
+
+//                        .requestMatchers(HttpMethod.POST, "/vendor/add").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.PUT, "/vendor/update/{id").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.GET,"/products-with-images/{vendorId}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.GET,"/products/all/{userId}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.POST,"/product/add/{userId}/{categoryId}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.POST,"/api/product/image/upload/{pid}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.PUT,"/product/update/status/{productId}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.PUT,"/product/update/{productId}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.DELETE,"product/delete/{id}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.GET,"/orders/{vendorId}/{orderStatus}").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.GET,"/orders/{vendorId}").hasAuthority("VENDOR")
+//                        .requestMatchers("/vendor/**", "/products/**").hasAuthority("VENDOR")
+//                        .requestMatchers("/customer/**").hasAuthority("CUSTOMER")
 
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

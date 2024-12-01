@@ -1,9 +1,9 @@
 package com.springboot.ecom.exception;
 
-public class InvalidUsernameException extends Exception {
+public class DuplicateEntryException extends Exception {
     private String message;
 
-    public InvalidUsernameException(String message) {
+    public DuplicateEntryException(String message) {
         super();
         this.message = message;
     }

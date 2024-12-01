@@ -13,21 +13,25 @@ public class GlobalExceptionHandler {
     private ResponseMessageDto dto;
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
+    public ResponseEntity<ResponseMessageDto> handleResourceNotFoundException(ResourceNotFoundException e) {
         dto.setMsg(e.getMessage());
-        return ResponseEntity.badRequest().body(dto);
+        return ResponseEntity.status(404).body(dto); // Sends a 404 response
     }
 
     @ExceptionHandler(InvalidUsernameException.class)
-    public ResponseEntity<?> handleInvalidUsernameException(InvalidUsernameException e) {
+    public ResponseEntity<ResponseMessageDto> handleInvalidUsernameException(InvalidUsernameException e) {
         dto.setMsg(e.getMessage());
-        return ResponseEntity.badRequest().body(dto);
+        return ResponseEntity.status(400).body(dto); // Sends a 400 response
     }
 
+    @ExceptionHandler(DuplicateEntryException.class)
+    public ResponseEntity<ResponseMessageDto> handleDuplicateEntryException(DuplicateEntryException e) {
+        dto.setMsg(e.getMessage());
+        return ResponseEntity.status(400).body(dto); // Sends a 400 response
+    }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGeneralException(Exception e) {
-        dto.setMsg("An error occurred: " + e.getMessage());
-        return ResponseEntity.badRequest().body(dto);
+    public ResponseEntity<ResponseMessageDto> handleGeneralException(Exception e) {
+        dto.setMsg("An unexpected error occurred: " + e.getMessage());
+        return ResponseEntity.status(500).body(dto); // Sends a 500 response
     }
 }
-

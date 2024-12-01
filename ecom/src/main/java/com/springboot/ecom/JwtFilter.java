@@ -2,6 +2,8 @@ package com.springboot.ecom;
 
 import com.springboot.ecom.service.UserSecurityService;
 import com.springboot.ecom.utils.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,8 +57,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
             }
             filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"message\": \"Token has expired.\"}");
+            return;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"message\": \"You are not authorized.\"}");
+            return;
         }
+
     }
 }

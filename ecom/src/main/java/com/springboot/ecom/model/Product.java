@@ -1,5 +1,6 @@
 package com.springboot.ecom.model;
 
+import com.springboot.ecom.enums.FeaturedRequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,14 +15,15 @@ public class Product {
     private String description;
 
     private double price;
+
     private int stock;
     @ManyToOne
-    @JoinColumn(name = "vendor_id")
-    private Vendor vendor;
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
+    @Enumerated(EnumType.STRING)
+    private FeaturedRequest featuredRequest;
 
     public int getId() {
         return id;
@@ -63,12 +65,20 @@ public class Product {
         this.stock = stock;
     }
 
-    public Vendor getVendor() {
-        return vendor;
+    public User getUser() {
+        return user;
     }
 
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public FeaturedRequest getFeaturedRequest() {
+        return featuredRequest;
+    }
+
+    public void setFeaturedRequest(FeaturedRequest featuredRequest) {
+        this.featuredRequest = featuredRequest;
     }
 
     public Category getCategory() {
@@ -78,4 +88,5 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }

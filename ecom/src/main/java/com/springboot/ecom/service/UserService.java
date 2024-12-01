@@ -6,9 +6,12 @@ import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.User;
 import com.springboot.ecom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,14 +27,19 @@ public class UserService {
         if (optional.isPresent()) {
             throw new InvalidUsernameException("Username already in use");
         }
-        if (Role.VENDOR.equals(user.getRole())) {
-            user.setEnabled(false);
-        } else {
-            user.setEnabled(true);
-        }
+        user.setRole(Role.CUSTOMER);
+//        if (Role.VENDOR.equals(user.getRole())) {
+//            user.setEnabled(false);
+//        } else {
+//            user.setEnabled(true);
+//        }
+        user.setRegistrationDate(LocalDate.now());
         String encryptedPass = passEncoder.encode(user.getPassword());
         user.setPassword(encryptedPass);
+        return userRepository.save(user);
+    }
 
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
@@ -40,22 +48,26 @@ public class UserService {
     }
 
 
-    public User updateUserStatus(int id, boolean status) throws ResourceNotFoundException {
-        Optional<User> optional = userRepository.findById(id);
-        if (optional.isEmpty())
-            throw new ResourceNotFoundException("UserId is Invalid");
+    public User findByUserId(int userId) throws ResourceNotFoundException, InvalidUsernameException {
+        Optional<User> optional = userRepository.findById(userId);
 
+        if (optional.isEmpty()) {
+            throw new ResourceNotFoundException("User id is invalid");
+        }
         User user = optional.get();
-        user.setEnabled(status);
-        return userRepository.save(user);
+        if (user.getId() <= 0) {
+            throw new InvalidUsernameException("Invalid username");
+        }
+
+        return user;
     }
 
-    public User findByUserId(int userId) throws ResourceNotFoundException {
 
-        Optional<User> optional = userRepository.findById(userId);
-        if (optional.isEmpty())
-            throw new ResourceNotFoundException("User id is invalid");
+    public void deleteById(int id) {
+        userRepository.deleteById(id);
+    }
 
-        return optional.get();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
