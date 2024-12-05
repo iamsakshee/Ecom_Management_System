@@ -133,7 +133,7 @@
               Electronics
             </a>
             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
-              <li><a class="dropdown-item" href="#">Mobiles</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 1]">Earphones</a></li>
               <li><a class="dropdown-item" href="#">Laptops</a></li>
               <li><a class="dropdown-item" href="#">Cameras</a></li>
             </ul>
@@ -145,7 +145,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
               <li><a class="dropdown-item" href="#">Men</a></li>
-              <li><a class="dropdown-item" href="#">Women</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 2]">Women</a></li>
               <li><a class="dropdown-item" href="#">Kids wear</a></li>
             </ul>
           </li>
@@ -168,7 +168,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Cookware</a></li>
-              <li><a class="dropdown-item" href="#">Dining</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 52]">Dining</a></li>
               <li><a class="dropdown-item" href="#">Small Appliances</a></li>
             </ul>
           </li>
@@ -209,7 +209,7 @@
             <i class="bi bi-cart-fill fs-4"></i>
           </button>
           <!-- Wishlist Icon -->
-          <button class="icon-btn">
+          <button class="icon-btn"  (click)="navigateToWishlist()" >
             <i class="bi bi-heart-fill fs-4"></i>
           </button>
           <!-- Profile Icon -->

@@ -7,6 +7,10 @@ import { AddDetailsComponent } from './components/customer/add-details/add-detai
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { CustomerCartComponent } from './components/customer/customer-cart/customer-cart.component';
+import { ProductDetailComponent } from './components/product/product-detail/product-detail.component';
+import { ProductCategoryComponent } from './components/product/product-category/product-category.component';
+import { ProductWishlistComponent } from './components/product/product-wishlist/product-wishlist.component';
+import { CheckoutComponent } from './components/product/product-checkout/product-checkout.component';
 export const routes: Routes = [
 
         {
@@ -27,6 +31,18 @@ export const routes: Routes = [
         },
         {
             path:'cart', component:CustomerCartComponent
+        },
+        {
+            path: 'product/:id', component: ProductDetailComponent 
+        },
+        {
+            path: 'category/:categoryId', component: ProductCategoryComponent
+        },
+        {
+            path: 'wishlist', component: ProductWishlistComponent
+        },
+        {
+            path: 'checkout', component: CheckoutComponent
         }
        
 ];

@@ -37,7 +37,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/customer/register").hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/customer/address/post/{cid}").hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/api/customer/details").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/customer/product/purchase/{customerId}/{productId}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/product/category/{categoryId}").hasAuthority("CUSTOMER")
                         
+                       
                                                
                         .anyRequest().permitAll()
                 )

@@ -11,6 +11,10 @@ public class Product {
     private String name;
     private double price;
     private int stock;
+    
+    @Column(length = 500)
+    private String description;
+
 
     @ManyToOne
     private Vendor vendor;
@@ -41,6 +45,15 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     public int getStock() {
         return stock;

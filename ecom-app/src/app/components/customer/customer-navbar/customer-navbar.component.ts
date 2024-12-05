@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-customer-navbar',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './customer-navbar.component.html',
   styleUrl: './customer-navbar.component.css'
 })
@@ -27,5 +27,9 @@ navigateToCart(){
 
 navigatetodashboard(){
   this.router.navigateByUrl('/dashboard');
+}
+
+navigateToWishlist(){
+  this.router.navigateByUrl('/wishlist')
 }
 }

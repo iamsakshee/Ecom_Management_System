@@ -1,0 +1,20 @@
+<div class="checkout-container">
+    <h2>Checkout</h2>
+    <p>Total Amount: Rs. {{ totalAmount }}</p>
+  
+    <h3>Select Payment Method</h3>
+    <button (click)="selectPaymentMethod('Card')">Credit/Debit Card</button>
+    <button (click)="selectPaymentMethod('UPI')">UPI</button>
+    <button (click)="selectPaymentMethod('COD')">Cash on Delivery (COD)</button>
+  
+    <div *ngIf="paymentMethod">
+      <p>Selected Payment Method: {{ paymentMethod }}</p>
+      <button (click)="confirmOrder()">Confirm Order</button>
+    </div>
+  
+    <div *ngIf="isPaymentConfirmed">
+      <h3>Payment Confirmed!</h3>
+      <button (click)="completePayment()">Complete Payment</button>
+    </div>
+  </div>
+  

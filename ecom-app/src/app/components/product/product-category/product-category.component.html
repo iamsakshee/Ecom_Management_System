@@ -1,0 +1,47 @@
+<header>
+    <app-customer-navbar></app-customer-navbar>
+  </header>
+  
+  <div class="container mt-4">
+   
+    <div *ngIf="products.length; else noProducts">
+      <div class="row">
+        <div class="col-md-4" *ngFor="let product of products">
+          <div class="card mb-4">
+            <!-- Product Image -->
+            <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200'" class="card-img-top"
+              alt="{{ product.name }}" />
+  
+            <div class="card-body">
+              <!-- Product Title -->
+              <h5 class="card-title">{{ product.name }}</h5>
+  
+              <!-- Product Description -->
+              <p class="card-text"><strong>Description:</strong> {{ product.description }}</p>
+  
+              <!-- Product Price -->
+              <p class="card-text"><strong>Price:</strong> Rs.{{ product.price }}</p>
+  
+              <!-- Quantity Selection -->
+              <div class="form-group">
+                <label for="quantity_{{ product.id }}">Quantity</label>
+                <input type="number" id="quantity_{{ product.id }}" [(ngModel)]="product.quantity"
+                  class="form-control form-control-sm" min="1" [max]="product.stock || 10"
+                  style="border-radius: 5px; border: 1px solid rgb(141, 68, 219);" />
+              </div>
+  
+              <!-- Buy Now Button -->
+              <button class="btn btn-block mt-3" (click)="purchaseProduct(product)" style="background-color: rgb(141, 68, 219); color: white;">
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #noProducts>
+      <p>No products available for this category.</p>
+    </ng-template>
+  </div>
+  

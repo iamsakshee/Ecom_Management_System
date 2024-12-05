@@ -1,17 +1,17 @@
-/* Show dropdown menu on hover */
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    
-  }
-  
-  .nav-item.dropdown {
-    position: relative;
-  }
-  
+.card-custom {
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.card-title, .card-text {
+  color: rgb(0, 0, 0);
+}
+
+button {
+  background-color: rgb(141, 68, 219);
+  color: white;
+  border: none;
+}
+
+button:hover {
+  background-color: rgb(123, 58, 198);
+}
