@@ -28,12 +28,16 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                		
                         .requestMatchers(HttpMethod.GET, "/api/token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/hello").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/executive/hello").hasAuthority("EXECUTIVE")
                         .requestMatchers(HttpMethod.POST, "/customer/register").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/customer/address/post/{cid}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/api/customer/details").hasAuthority("CUSTOMER")
+                        
                                                
                         .anyRequest().permitAll()
                 )

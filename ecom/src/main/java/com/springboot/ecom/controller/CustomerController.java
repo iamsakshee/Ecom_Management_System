@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.ecom.dto.CustomerShippingDetailsDto;
 import com.springboot.ecom.dto.ProductResponseDto;
 import com.springboot.ecom.dto.ResponseMessageDto;
 import com.springboot.ecom.exception.ResourceNotFoundException;
@@ -108,6 +109,21 @@ public class CustomerController {
 		}
 
 		return ResponseEntity.ok(productDtos);
+	}
+	
+	
+	@GetMapping("/customers/get/all")
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        List<Customer> customers = customerService.getAllCustomers();
+        if (customers.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(customers);
+    } 
+	
+	@GetMapping("/customer/details")
+	public CustomerShippingDetailsDto getCustomerAndShippingDetailsByUsername(@RequestParam String username) {
+	    return customerService.getCustomerAndShippingDetailsByUsername(username);
 	}
 
 }

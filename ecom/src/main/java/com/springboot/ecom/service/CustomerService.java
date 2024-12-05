@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.springboot.ecom.enums.Role;
+import com.springboot.ecom.dto.CustomerShippingDetailsDto;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
-import com.springboot.ecom.model.User;
+import com.springboot.ecom.model.ShippingAddress;
 import com.springboot.ecom.repository.CustomerRepository;
+import com.springboot.ecom.repository.ShippingAddressRepository;
 import com.springboot.ecom.repository.UserRepository;
 
 @Service
@@ -21,10 +22,7 @@ public class CustomerService {
 	private CustomerRepository customerRepository;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private UserRepository userRepository;
+	private ShippingAddressRepository shippingAddressRepository;
 
 	public Customer validate(int id) throws ResourceNotFoundException {
 		Optional<Customer> optional = customerRepository.findById(id);
@@ -42,19 +40,42 @@ public class CustomerService {
 	}
 
 	public Customer insert(Customer customer) {
-		
-//		User user = customer.getUser();
-//		user.setRole(Role.CUSTOMER);
-//		String encPassword = passwordEncoder.encode(user.getPassword());
-//		user.setPassword(encPassword);
-//		user = userRepository.save(user); // complete user with role, password and id
-//		customer.setUser(user);
 		return customerRepository.save(customer);
 
 	}
 
 	public Customer insertCustomer(Customer existingCustomer) {
 		return customerRepository.save(existingCustomer);
+	}
+
+	public List<Customer> getAllCustomers() {
+		return customerRepository.findAll();
+	}
+
+	public CustomerShippingDetailsDto getCustomerAndShippingDetailsByUsername(String username) {
+		List<Object[]> customerDataList = customerRepository.findCustomerDetailsByUsername(username);
+
+		if (!customerDataList.isEmpty()) {
+			Object[] customerData = customerDataList.get(0);
+
+			int customerId = (int) customerData[0];
+			String customerName = (String) customerData[1];
+			String customerEmail = (String) customerData[2];
+			String phoneNumber = (String) customerData[3];
+
+			ShippingAddress shippingAddress = shippingAddressRepository.findShippingAddressByCustomerId(customerId);
+
+			CustomerShippingDetailsDto dto = new CustomerShippingDetailsDto();
+			dto.setCustomerId(customerId);
+			dto.setCustomerName(customerName);
+			dto.setCustomerEmail(customerEmail);
+			dto.setPhoneNumber(phoneNumber);
+			dto.setShippingAddress(shippingAddress);
+
+			return dto;
+		}
+
+		return null;
 	}
 
 }
