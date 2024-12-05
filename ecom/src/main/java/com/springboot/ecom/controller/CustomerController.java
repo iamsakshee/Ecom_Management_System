@@ -1,11 +1,12 @@
 package com.springboot.ecom.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.ecom.dto.ProductResponseDto;
 import com.springboot.ecom.dto.ResponseMessageDto;
-import com.springboot.ecom.exception.DuplicateUserIdException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
 import com.springboot.ecom.model.Product;
@@ -27,26 +27,27 @@ import com.springboot.ecom.service.ProductService;
 import com.springboot.ecom.service.UserService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
 
 	@Autowired
+	private ProductService productService;
+	
+	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private ProductService productService;
-
-	@PostMapping("/customer/add")
-	public ResponseEntity<?> addCustomer(@RequestBody Customer customer, ResponseMessageDto dto) {
-		
+	@PostMapping("/customer/register")
+	public Customer registerCustomer(@RequestBody Customer customer, ResponseMessageDto dto) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userService.findByUsername(username);
 		customer.setUser(user);
 
-		customerService.addCustomer(customer);
-		return ResponseEntity.ok(customer);
+		// its used to insert the customer details i.e. to register customer
+		System.out.println(customer);
+		return customerService.insert(customer);
 	}
 
 	@DeleteMapping("/customer/delete/{id}")
@@ -95,9 +96,16 @@ public class CustomerController {
 
 	@GetMapping("/customer/product/get")
 	public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
+
 		List<Product> products = productService.getAllProducts();
-		List<ProductResponseDto> productDtos = products.stream().map(product -> new ProductResponseDto(product.getId(),
-				product.getName(), product.getPrice(), product.getStock())).collect(Collectors.toList());
+
+		List<ProductResponseDto> productDtos = new ArrayList<>();
+
+		for (Product product : products) {
+			ProductResponseDto dto = new ProductResponseDto(product.getId(), product.getName(), product.getPrice(),
+					product.getStock());
+			productDtos.add(dto);
+		}
 
 		return ResponseEntity.ok(productDtos);
 	}

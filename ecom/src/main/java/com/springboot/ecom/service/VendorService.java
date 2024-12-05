@@ -16,6 +16,7 @@ public class VendorService {
     private VendorRepository vendorRepository;
 
     public Vendor addVendor(Vendor vendor) {
+    	
         vendor.setRegistrationDate(LocalDate.now());
         return vendorRepository.save(vendor);
     }

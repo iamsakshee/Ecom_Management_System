@@ -1,0 +1,109 @@
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/bs-brain@2.0.4/components/registrations/registration-5/assets/css/registration-5.css"
+/>
+
+<section class="p-3 p-md-4 p-xl-5">
+  <div class="container">
+    <div class="card border-light-subtle shadow-sm">
+      <div class="row g-0">
+        <div
+          class="col-12 col-md-6"
+          style="background-color: rgba(141, 68, 219, 1)"
+        >
+          <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="col-10 col-xl-8 py-3 text-white">
+              <hr class="border-light-subtle mb-4" />
+              <h2 class="h1 mb-4">Join Us and Make Your Business Stand Out!</h2>
+              <p class="lead m-0">
+                Register now to start selling your products and reaching more
+                customers.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="card-body p-3 p-md-4 p-xl-5">
+            <div class="row text-center">
+              <div class="col-12">
+                <div class="mb-5">
+                  <h2 class="h3">Vendor Registration</h2>
+                  <h3 class="fs-6 fw-normal text-secondary m-0">
+                    Please enter your details below
+                  </h3>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="successMsg" class="alert alert-primary">
+              {{ successMsg }}
+            </div>
+            <div *ngIf="errorMsg" class="alert alert-danger">
+              {{ errorMsg }}
+            </div>
+            <form>
+              <div class="row gy-3 gy-md-4">
+                <div class="col-12">
+                  <label for="username" class="form-label"
+                    >Username <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    [(ngModel)]="username"
+                    required
+                  />
+                </div>
+                <div class="col-12">
+                  <label for="password" class="form-label"
+                    >Password <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    [(ngModel)]="password"
+                    required
+                  />
+                </div>
+                <div class="col-12 d-flex justify-content-center">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="onSignUp()"
+                    style="background-color: rgba(141, 68, 219, 1)"
+                  >
+                    Register
+                  </button>
+                </div>
+              </div>
+            </form>
+            <hr />
+            <div class="d-flex justify-content-center align-items-center">
+              <p class="text-secondary mb-0 me-2">Already registered?</p>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                style="
+                  background-color: white;
+                  color: rgba(141, 68, 219, 1);
+                  border: 0;
+                "
+                [routerLink]="['/']"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

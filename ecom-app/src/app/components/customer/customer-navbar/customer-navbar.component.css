@@ -1,0 +1,5 @@
+/* Add this CSS to make the cursor a pointer on list items and dropdowns */
+.dropdown-item, .nav-link, .icon-btn, .profile-pic-btn, .navbar-brand {
+    cursor: pointer;
+  }
+  

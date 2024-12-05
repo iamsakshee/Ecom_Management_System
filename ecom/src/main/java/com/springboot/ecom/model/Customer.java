@@ -23,6 +23,7 @@ public class Customer {
 	@Column(nullable = false)
 	private String phoneNumber;
 	
+	
 	@OneToOne
 	private User user;
 
@@ -65,6 +66,14 @@ public class Customer {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", name=" + name + ", email=" + email + ", phoneNumber=" + phoneNumber + ", user="
+				+ user + "]";
+	}
+	
+	
 	
 	
 	

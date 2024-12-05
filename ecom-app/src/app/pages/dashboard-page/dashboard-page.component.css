@@ -1,0 +1,17 @@
+/* Show dropdown menu on hover */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    
+  }
+  
+  .nav-item.dropdown {
+    position: relative;
+  }
+  

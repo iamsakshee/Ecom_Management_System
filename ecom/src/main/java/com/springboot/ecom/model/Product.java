@@ -13,10 +13,9 @@ public class Product {
     private int stock;
 
     @ManyToOne
-    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
+    
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
 
     public int getId() {

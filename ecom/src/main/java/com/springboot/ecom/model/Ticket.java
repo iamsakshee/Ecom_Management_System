@@ -37,7 +37,8 @@ public class Ticket {
 	@ManyToOne
 	private Customer customer;
 
-	// private Product product;
+	@ManyToOne
+	private Product product;
 
 	public int getId() {
 		return id;

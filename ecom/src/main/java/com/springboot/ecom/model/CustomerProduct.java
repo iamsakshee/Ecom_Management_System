@@ -23,11 +23,9 @@ public class CustomerProduct {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private int quantity;
