@@ -37,6 +37,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@PostMapping("/auth/sign-up")
+	public ResponseEntity<User> signUp(@RequestBody User user)
+			throws InvalidUsernameException{
+		User savedUser=userService.signUp(user);
+		return ResponseEntity.ok(savedUser);
+	}
+
 	@PostMapping("/api/token")
     public ResponseEntity<JwtDto> getToken(@RequestBody User user, JwtDto dto) {
         Authentication auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
@@ -49,12 +56,6 @@ public class UserController {
         return ResponseEntity.ok(dto);
 		}
 	
-	@PostMapping("/auth/sign-up")
-	public ResponseEntity<User> signUp(@RequestBody User user)
-			throws InvalidUsernameException{
-		User savedUser=userService.signUp(user);
-			return ResponseEntity.ok(savedUser);
-		}
 	
 	@GetMapping("/auth/user")
 	public User getUserDetails(Principal principal) {

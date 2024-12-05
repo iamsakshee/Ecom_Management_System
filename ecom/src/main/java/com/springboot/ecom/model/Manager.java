@@ -5,23 +5,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "manager")
 public class Manager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-	@Column(nullable = false, unique = true)
-    private String username;
+	@Column(nullable = false)
+    private String name;
     
     @Column(nullable = false, unique = true)
     private String contact;
     
-    private boolean enabled=true; 
+    @ManyToOne
+    private Warehouse warehouse;
     
-    public int getId() {
+    @OneToOne
+    private User user;
+
+	public int getId() {
 		return id;
 	}
 
@@ -29,12 +37,12 @@ public class Manager {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getContact() {
@@ -45,11 +53,27 @@ public class Manager {
 		this.contact = contact;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
+	public Warehouse getWarehouse() {
+		return warehouse;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "Manager [id=" + id + ", name=" + name + ", contact=" + contact + ", warehouse=" + warehouse + ", user="
+				+ user + "]";
+	}
+
+	
 }

@@ -7,32 +7,45 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 	
 	@Entity
+	@Table(name = "delivery")
 	public class Delivery {
 
 		@Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
 	    private int id;
-		
-		//delivery to
+	
+	    @Column(nullable = false)
+	    private String deliveredToPerson;
 	    
-	    @Column(nullable = false, unique = true)
-	    private String deliveryPerson;
+	    @Column(nullable = false)
+	    private String deliveredByPerson;
 
 	    @Column(nullable = false)
 	    private LocalDateTime deliveryDate;
 
 	    @Column(nullable = false)
-	    private String proofid;
+	    private String proofId;
+	
+	    @OneToOne
+	    private Shipment shipment;
 	    
-	    @Column(nullable = false)
-	    private String specialInstruction;
-	    
-	    private boolean enabled=true; 
+	    @ManyToOne
+	    private Warehouse warehouse;
 
-		
-	    public int getId() {
+		public Warehouse getWarehouse() {
+			return warehouse;
+		}
+
+		public void setWarehouse(Warehouse warehouse) {
+			this.warehouse = warehouse;
+		}
+
+		public int getId() {
 			return id;
 		}
 
@@ -40,12 +53,20 @@ import jakarta.persistence.Id;
 			this.id = id;
 		}
 
-		public String getDeliveryPerson() {
-			return deliveryPerson;
+		public String getDeliveredToPerson() {
+			return deliveredToPerson;
 		}
 
-		public void setDeliveryPerson(String deliveryPerson) {
-			this.deliveryPerson = deliveryPerson;
+		public void setDeliveredToPerson(String deliveredToPerson) {
+			this.deliveredToPerson = deliveredToPerson;
+		}
+
+		public String getDeliveredByPerson() {
+			return deliveredByPerson;
+		}
+
+		public void setDeliveredByPerson(String deliveredByPerson) {
+			this.deliveredByPerson = deliveredByPerson;
 		}
 
 		public LocalDateTime getDeliveryDate() {
@@ -56,28 +77,30 @@ import jakarta.persistence.Id;
 			this.deliveryDate = deliveryDate;
 		}
 
-		public String getProofid() {
-			return proofid;
+		public String getProofId() {
+			return proofId;
 		}
 
-		public void setProofid(String proofid) {
-			this.proofid = proofid;
+		public void setProofId(String proofId) {
+			this.proofId = proofId;
 		}
 
-		public String getSpecialInstruction() {
-			return specialInstruction;
+		public Shipment getShipment() {
+			return shipment;
 		}
 
-		public void setSpecialInstruction(String specialInstruction) {
-			this.specialInstruction = specialInstruction;
+		public void setShipment(Shipment shipment) {
+			this.shipment = shipment;
 		}
 
-		public boolean isEnabled() {
-			return enabled;
+		@Override
+		public String toString() {
+			return "Delivery [id=" + id + ", deliveredToPerson=" + deliveredToPerson + ", deliveredByPerson="
+					+ deliveredByPerson + ", deliveryDate=" + deliveryDate + ", proofId=" + proofId
+					+ ", shipment=" + shipment + ", warehouse=" + warehouse
+					+ "]";
 		}
 
-		public void setEnabled(boolean enabled) {
-			this.enabled = enabled;
-		}
-	
+		
+	        
 }

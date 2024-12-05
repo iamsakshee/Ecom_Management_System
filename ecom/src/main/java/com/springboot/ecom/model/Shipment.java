@@ -9,8 +9,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "shipments")
 public class Shipment {
 
     @Id
@@ -23,39 +27,46 @@ public class Shipment {
     @Column(nullable = false)
     private LocalDate deliveryDate;
 
-    @Column(nullable = false)
-    private String deliveryAddress;
+    @OneToOne
+    private ShippingAddress shippingAddress;
 
-    // Getters and Setters
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public ShipmentStatus getStatus() {
-        return status;
-    }
+	public ShipmentStatus getStatus() {
+		return status;
+	}
 
-    public void setStatus(ShipmentStatus status) {
-        this.status = status;
-    }
+	public void setStatus(ShipmentStatus status) {
+		this.status = status;
+	}
 
-    public LocalDate getDeliveryDate() {
-        return deliveryDate;
-    }
+	public LocalDate getDeliveryDate() {
+		return deliveryDate;
+	}
 
-    public void setDeliveryDate(LocalDate deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
+	public void setDeliveryDate(LocalDate deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
+	public ShippingAddress getShippingAddress() {
+		return shippingAddress;
+	}
 
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
+	public void setShippingAddress(ShippingAddress shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Shipment [id=" + id + ", status=" + status + ", deliveryDate=" + deliveryDate + ", shippingAddress="
+				+ shippingAddress + "]";
+	}
+
 }

@@ -21,27 +21,24 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user_info")
-public class User implements UserDetails{
+public class User  implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-
+	
 	@Column(nullable = false)
 	private String username;
 
 	@Column(nullable = false)
-	private String name;
-
-	@Column(nullable = false)
 	private String password;
-
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
-	private boolean enabled = true;
+	
+	private boolean enabled =true; 
 
 	public int getId() {
 		return id;
@@ -66,15 +63,7 @@ public class User implements UserDetails{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public Role getRole() {
 		return role;
 	}
@@ -82,18 +71,17 @@ public class User implements UserDetails{
 	public void setRole(Role role) {
 		this.role = role;
 	}
-
+	
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.toString());
 		List<GrantedAuthority> list = new ArrayList<>();
 		list.add(authority);
-		return list;
-	}
+		return list;}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -114,5 +102,6 @@ public class User implements UserDetails{
 	public boolean isEnabled() {
 		return enabled;
 	}
+
 
 }

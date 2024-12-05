@@ -22,16 +22,15 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(InvalidUsernameException.class)
-	
 	public ResponseEntity<?> handleInvalidUsernameException(Exception e){
 		 dto.setMsg(e.getMessage());
 		 return ResponseEntity.badRequest().body(dto);
 	}
 	
 	@ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGeneralException(Exception e) {
-        dto.setMsg("An error occurred: " + e.getMessage());
-        return ResponseEntity.badRequest().body(dto);
-    }
+	public ResponseEntity<ResponseMessageDto> handleGeneralException(Exception e) {
+		dto.setMsg("An unexpected error occurred: " + e.getMessage());
+		return ResponseEntity.status(500).body(dto); // Sends a 500 response
+	}
 }
 

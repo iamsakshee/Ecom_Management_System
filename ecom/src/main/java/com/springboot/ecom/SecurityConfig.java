@@ -33,7 +33,6 @@ public class SecurityConfig {
 				 	.requestMatchers(HttpMethod.POST, "/api/token").permitAll()
 				 	.requestMatchers(HttpMethod.GET, "/auth/user").authenticated()
 				 	 .requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll() 
-				 	 .requestMatchers(HttpMethod.GET, "/api/hello").authenticated()
 				 	.requestMatchers("/manager/**", "/delivery/**","/warehouse/**","/shipment/**").hasAuthority("MANAGER")
 				 	
 				.anyRequest().permitAll()
@@ -41,7 +40,6 @@ public class SecurityConfig {
 			.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			
 		   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-		 
 		return http.build();
 	}
 	

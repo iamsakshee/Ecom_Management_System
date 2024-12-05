@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "warehouse")
 public class Warehouse {
 
     @Id
@@ -16,11 +18,9 @@ public class Warehouse {
     @Column(nullable = false, unique = true)
     private String city;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String company;
-    
-    private boolean enabled=true; 
-    
+
 	public int getId() {
 		return id;
 	}
@@ -45,14 +45,12 @@ public class Warehouse {
 		this.company = company;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
+	@Override
+	public String toString() {
+		return "Warehouse [id=" + id + ", city=" + city + ", company=" + company + "]";
 	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
+    
+    
 	
       
 }    

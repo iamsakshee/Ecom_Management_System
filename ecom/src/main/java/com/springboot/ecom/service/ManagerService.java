@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Manager;
 import com.springboot.ecom.repository.ManagerRepository;
+import com.springboot.ecom.repository.WarehouseRepository;
 
 	@Service
 	public class ManagerService {
@@ -39,5 +40,20 @@ import com.springboot.ecom.repository.ManagerRepository;
 			return optional.get();
 			
 		}
+
+		public Optional<Manager> getManagerByUsername(String username) {
+			return managerRepository.findByUserUsername(username);
+		}
+
+		public Manager addManager(String username, Manager manager) {
+			 manager = new Manager();
+		        manager.setName(manager.getName());
+		        manager.setContact(manager.getContact());
+		        manager.setWarehouse(manager.getWarehouse());
+			return managerRepository.save(manager);
+		}
+		
+		        
+		        
 }
 

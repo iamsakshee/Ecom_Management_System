@@ -1,7 +1,7 @@
 package com.springboot.ecom.enums;
 
 public enum ShipmentStatus {
+	PENDING,
     INTRANSIT,
-    DELIVERED,
-    PENDING // Add other statuses as needed
+    DELIVERED
 }
