@@ -11,29 +11,36 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './product-category.component.html',
   styleUrl: './product-category.component.css'
 })
-export class ProductCategoryComponent  implements OnInit {
-  categoryId: number = 1; // Example Category ID
-  products: any[] = []; // List of products
+export class ProductCategoryComponent implements OnInit {
+  categoryId!: number; // Category ID from the URL
+  products: any[] = []; // Array to store products
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private productService: ProductService
+  ) {}
 
   ngOnInit(): void {
-    this.fetchProducts();
+    // Get the category ID from the route parameter
+    this.route.params.subscribe((params) => {
+      this.categoryId = params['categoryId']; 
+      this.fetchProducts();
+    });
   }
 
   fetchProducts(): void {
+    // Fetch products by category from ProductService
     this.productService.getProductsByCategory(this.categoryId).subscribe({
       next: (data) => {
-       
-        this.products = data.map((product: any) => ({ ...product, quantity: 1 }));
+        this.products = data; // Update product list
       },
-      error: (err) => {
-        console.error('Error fetching products:', err);
-      },
+      error: (error) => {
+        console.error('Error fetching products', error);
+      }
     });
   }
 
   purchaseProduct(product: any): void {
-    console.log(`Purchased ${product.quantity} of ${product.name}`);
+    alert(`You have purchased: ${product.name}`);
   }
 }

@@ -15,7 +15,7 @@ export class AddDetailsComponent implements OnInit {
   successMsg: string | undefined;
   errorMsg: string | undefined;
   customerForm: FormGroup;
-  customerId: number | undefined; 
+  customerId: number | undefined; // To store the registered customer's ID
   customer: any;
 
   constructor(private router: Router, private customerService: CustomerService) {
@@ -36,16 +36,16 @@ export class AddDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+    // Fetch customer details based on the username stored in localStorage
     const username = localStorage.getItem('username');
     
     if (username) {
       this.customerService.getCustomerDetailsByUsername(username).subscribe({
         next: (data) => {
-          this.customer = data; 
+          this.customer = data; // Store the fetched data
           console.log(this.customer);
           
-
+          // Check if customer data is available and assign it to the form
           if (this.customer && this.customer.shippingAddress) {
             this.customerForm.patchValue({
               name: this.customer.customerName,
@@ -74,12 +74,12 @@ export class AddDetailsComponent implements OnInit {
       phoneNumber: this.customerForm.value.phoneNumber
     };
 
-   
+    // Step 1: Register the Customer
     this.customerService.addCustomerDetails(customerDetails).subscribe({
       next: (data: any) => {
         this.successMsg = "Customer registered";
-        this.customerId = data.id; 
-        this.addShippingAddress(); 
+        this.customerId = data.id; // Assuming the API returns the registered customer ID
+        this.addShippingAddress(); // Step 2: Add Shipping Address
       },
       error: (err) => {
         this.errorMsg = err.error.msg;

@@ -44,7 +44,7 @@ public class ReviewController {
 		customer = customerService.validate(cid);
 		
 		Product product = null;
-		product = productService.validate(pid);
+		product = productService.getProductById(pid);
 		
 		review.setCustomer(customer);
 		review.setProduct(product);

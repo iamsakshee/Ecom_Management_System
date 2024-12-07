@@ -48,10 +48,10 @@ public class VendorController {
         }
     }
 
-    @GetMapping("/vendor/getProducts/{id}")
-    public ResponseEntity<Set<Product>> getProductsByVendorId(@PathVariable int id) {
-        return ResponseEntity.ok(productService.findProductsByVendor(id));
-    }
+//    @GetMapping("/vendor/getProducts/{id}")
+//    public ResponseEntity<Set<Product>> getProductsByVendorId(@PathVariable int id) {
+//        return ResponseEntity.ok(productService.getAllProductsByVendor(id));
+//    }
 
     @PutMapping("/vendor/update/{id}")
     public ResponseEntity<?> updateVendor(@PathVariable int id, @RequestBody Vendor newVendor, ResponseMessageDto dto) {

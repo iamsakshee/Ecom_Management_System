@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 export class OrderService{
 
     private purchaseProductApi = 'http://localhost:8082/customer/product/purchase';
+    private getOrderByCustomerIdApi = 'http://localhost:8082/orders/details'
 
     constructor(private httpClient: HttpClient) { }
 
@@ -22,5 +23,10 @@ export class OrderService{
         const url = `${this.purchaseProductApi}/${customerId}/${productId}?quantity=${quantity}`;
         return this.httpClient.post(url, {}, httpOptions);
       }
+
+    public getOrdersByCustomerId(customerId: any){
+      return this.httpClient.get(this.getOrderByCustomerIdApi + "/" + customerId)
+
+    }
 
 }

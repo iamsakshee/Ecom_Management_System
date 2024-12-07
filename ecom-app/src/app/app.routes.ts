@@ -10,7 +10,8 @@ import { CustomerCartComponent } from './components/customer/customer-cart/custo
 import { ProductDetailComponent } from './components/product/product-detail/product-detail.component';
 import { ProductCategoryComponent } from './components/product/product-category/product-category.component';
 import { ProductWishlistComponent } from './components/product/product-wishlist/product-wishlist.component';
-import { CheckoutComponent } from './components/product/product-checkout/product-checkout.component';
+import { ProductCheckoutComponent } from './components/product/product-checkout/product-checkout.component';
+import { CustomerMyorderComponent } from './components/customer/customer-myorder/customer-myorder.component';
 export const routes: Routes = [
 
         {
@@ -42,7 +43,10 @@ export const routes: Routes = [
             path: 'wishlist', component: ProductWishlistComponent
         },
         {
-            path: 'checkout', component: CheckoutComponent
+            path: 'checkout', component: ProductCheckoutComponent
+        },
+        {
+            path: 'order/:customerId', component: CustomerMyorderComponent
         }
        
 ];

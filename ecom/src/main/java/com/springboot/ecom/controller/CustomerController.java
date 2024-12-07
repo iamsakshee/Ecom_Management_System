@@ -131,9 +131,9 @@ public class CustomerController {
 	}
 	
 	
-	 @GetMapping("/api/products/search")
-	    public List<Product> searchProducts(@RequestParam String query) {
-	        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
-	    }
+//	 @GetMapping("/api/products/search")
+//	    public List<Product> searchProducts(@RequestParam String query) {
+//	        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
+//	    }
 
 }

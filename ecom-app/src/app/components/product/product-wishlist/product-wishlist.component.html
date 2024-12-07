@@ -1,32 +1,56 @@
-<header><app-customer-navbar></app-customer-navbar></header>
+
+<header>
+  <app-customer-navbar></app-customer-navbar>
+</header>
+<!-- Success Message -->
+<div *ngIf="successMessage" class="alert alert-success" role="alert">
+  {{ successMessage }}
+</div>
+
+<!-- Error Message -->
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  {{ errorMessage }}
+</div>
 
 <!-- Wishlist Section -->
 <div class="container mt-4">
-  <div class="row">
-    <!-- Wishlist Icon Button -->
-    <div class="col-12">
-      <button class="icon-btn" style="background-color: rgb(141, 68, 219); border: none; padding: 10px; border-radius: 5px;">
-        <i class="bi bi-heart-fill fs-4" style="color: white;"></i>
-      </button>
-    </div>
-    
-    <!-- Wishlist Items List (If any items are added) -->
-    <div class="col-12 mt-4">
-      <h3>Your Wishlist</h3>
-      <div *ngIf="wishlistItems.length === 0">
-        <p>No items in wishlist</p>
-      </div>
-      <div *ngIf="wishlistItems.length > 0">
-        <ul class="list-group">
-          <li *ngFor="let item of wishlistItems" class="list-group-item">
-            <h5>{{ item.name }}</h5>
-            <p>{{ item.description }}</p>
-            <button class="btn btn-outline-danger" (click)="removeFromWishlist(item)">
-              Remove from Wishlist
-            </button>
-          </li>
-        </ul>
+  <h3>Your Wishlist</h3>
+  <div *ngIf="wishlist.length > 0; else emptyWishlist">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col" *ngFor="let product of wishlist">
+        <div class="card" style="border: 1px solid rgb(200, 200, 200);">
+          <img
+            [src]="product.image"
+            class="card-img-top"
+            alt="{{ product.name }}"
+            style="height: 200px;"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            <p class="card-text">Price: Rs.{{ product.price }}</p>
+            <div class="d-flex justify-content-between">
+              <button
+                class="btn btn-primary"
+                (click)="addToCart(product)"
+              >
+                Add to Cart
+              </button>
+              <button
+                class="btn btn-danger"
+                (click)="removeFromWishlist(product)"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Empty Wishlist Message -->
+  <ng-template #emptyWishlist>
+    <p>Your wishlist is empty. Add some products to your wishlist!</p>
+  </ng-template>
 </div>

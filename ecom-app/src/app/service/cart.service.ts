@@ -1,37 +1,53 @@
-// cart.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cart = new BehaviorSubject<any[]>([]);  // Observable cart
 
-  constructor() {}
+  private cartKey = 'cart';
 
-  addToCart(product: any) {
-    if (!product || !product.id) {
-      console.error('Product or Product ID is undefined');
-      return;  // Prevent the method from executing if the product is not valid
-    }
-
-    const currentCart = this.cart.getValue();
-    const productIndex = currentCart.findIndex(item => item.id === product.id);
-
-    if (productIndex !== -1) {
-      // If the product already exists in the cart, increase its quantity
-      currentCart[productIndex].quantity += 1;
-    } else {
-      // If product does not exist, add it to the cart
-      product.quantity = 1;
-      currentCart.push(product);
-    }
-
-    this.cart.next(currentCart);  // Update the cart
+  // Get the cart from localStorage
+  getCart(): any[] {
+    const cart = localStorage.getItem(this.cartKey);
+    return cart ? JSON.parse(cart) : [];
   }
 
-  getCart() {
-    return this.cart.asObservable();
+  // Add product to cart
+  addToCart(product: any, quantity: number = 1): void {
+    let cart = this.getCart();
+    const productDetails = {
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: quantity,
+      total: product.price * quantity,
+      image: product.image || "https://via.placeholder.com/100x100"
+    };
+    
+    // Check if the product already exists in the cart
+    const existingProduct = cart.find(item => item.productId === productDetails.productId);
+    if (existingProduct) {
+      // If product exists, update the quantity
+      existingProduct.quantity += quantity;
+      existingProduct.total = existingProduct.price * existingProduct.quantity;
+    } else {
+      // If product doesn't exist, add new product to cart
+      cart.push(productDetails);
+    }
+
+    // Save the updated cart to localStorage
+    localStorage.setItem(this.cartKey, JSON.stringify(cart));
+  }
+
+  // Calculate the total price of all items in the cart
+  getSubtotal(): number {
+    const cart = this.getCart();
+    return cart.reduce((total, item) => total + item.total, 0);
+  }
+
+  // Clear the cart
+  clearCart(): void {
+    localStorage.removeItem(this.cartKey);
   }
 }

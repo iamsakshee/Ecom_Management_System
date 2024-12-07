@@ -1,21 +1,85 @@
-.icon-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(141, 68, 219);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .icon-btn:hover {
-    background-color: rgb(103, 59, 173);
-  }
-  
-  .fs-4 {
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: rgba(245, 245, 245, 1);
+  margin: 0;
+  padding: 0;
+}
+
+.wishlist-title {
+  font-weight: bold;
+  color: rgba(141, 68, 219, 1);
+}
+
+/* Wishlist Card Styles */
+.wishlist-card {
+  border: 1px solid rgba(141, 68, 219, 0.2);
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+
+.wishlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(141, 68, 219, 0.3);
+}
+
+.wishlist-image {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.wishlist-product-name {
+  color: rgba(141, 68, 219, 1);
+  font-weight: bold;
+}
+
+.wishlist-product-price {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.wishlist-product-description {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.9rem;
+}
+
+/* Action Buttons */
+.btn-add-to-cart {
+  background-color: rgba(141, 68, 219, 1);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.btn-add-to-cart:hover {
+  background-color: rgba(111, 48, 199, 1);
+}
+
+.btn-remove-from-wishlist {
+  background-color: white;
+  color: rgba(141, 68, 219, 1);
+  border: 1px solid rgba(141, 68, 219, 1);
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.btn-remove-from-wishlist:hover {
+  background-color: rgba(141, 68, 219, 0.1);
+  color: rgba(111, 48, 199, 1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .wishlist-title {
     font-size: 1.5rem;
   }
-  
+
+  .wishlist-card {
+    margin-bottom: 1rem;
+  }
+}

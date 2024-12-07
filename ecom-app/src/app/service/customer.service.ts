@@ -8,10 +8,12 @@ import { Observable } from "rxjs";
 
 export class CustomerService {
   
-  private createCustomerApi = 'http://localhost:8082/customer/register';
+  private addCustomerApi = 'http://localhost:8082/customer/register';
   private getAllCustomersApi = 'http://localhost:8082/customer/all';
   private addShippingAddressApi = 'http://localhost:8082/customer/address/post';
   private getCustomerDetailsByUsernameApi='http://localhost:8082/customer/details';
+  private customerUpdateApi = 'http://localhost:8081/api/customer/update';
+  private shippingAddressUpdateApi = 'http://localhost:8081/customer/update/address';
 
 
 
@@ -34,10 +36,8 @@ export class CustomerService {
     };
 
 
-    return this.httpClient.post(this.createCustomerApi, postObj, httpOptions);
+    return this.httpClient.post(this.addCustomerApi, postObj, httpOptions);
   }
-
- 
 
   getCustomerDetails(customerId: number): Observable<any> {
     const httpOptions = {
@@ -70,6 +70,25 @@ export class CustomerService {
 
   public getCustomerDetailsByUsername(username: any) : Observable<any>{
     return this.httpClient.get(this.getCustomerDetailsByUsernameApi + '?username=' + username)
+}
+
+public customerUpdate(customerId:any): Observable<any>{
+
+  const httpOptions = {
+    headers: new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    }),
+  };
+  return this.httpClient.get(this.customerUpdateApi +"/" + customerId, httpOptions);
+}
+public shippingAddressUpdate(customerId:any): Observable<any>{
+
+  const httpOptions = {
+    headers: new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    }),
+  };
+  return this.httpClient.get(this.shippingAddressUpdateApi +"/" + customerId, httpOptions);
 }
 
 }

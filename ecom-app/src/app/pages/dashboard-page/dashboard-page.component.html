@@ -1,17 +1,37 @@
 <header><app-customer-navbar></app-customer-navbar></header>
 
-<!-- Product Cards Section -->
+
+<!-- Success Message -->
+<div *ngIf="successMessage" class="alert alert-success" role="alert">
+  {{ successMessage }}
+</div>
+
+<!-- Error Message -->
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  {{ errorMessage }}
+</div>
+
 <div class="container mt-4">
+ 
+  <!-- Rest of your component's HTML -->
+  
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <!-- Loop through all products -->
     <div class="col" *ngFor="let product of products">
       <div class="card card-custom" style="border: 1px solid rgb(200, 200, 200);">
         <!-- Display Product Image -->
-        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ product.name }}">
+        <div class="carousel-item active" *ngFor="let i of product.images">
+          <img [src]="i.path" class="d-block w-100" alt="{{ product.name }}" style="height: 200px;">
+        </div>
         <div class="card-body">
           <!-- Product Title and Details -->
           <h5 class="card-title" style="color: rgb(0, 0, 0);">{{ product.name }}</h5>
-          <p class="card-text" style="color: rgb(0, 0, 0);">{{ product.description }}</p>
+
+          <!-- Description: Check if the product description exists -->
+          <p class="card-text" style="color: rgb(0, 0, 0);">
+            <strong>Description:</strong> {{ product.description || 'No description available' }}
+          </p>
+          
           <p class="card-text" style="color: rgb(0, 0, 0);">Price: Rs.{{ product.price }}</p>
 
           <!-- Buttons Section -->

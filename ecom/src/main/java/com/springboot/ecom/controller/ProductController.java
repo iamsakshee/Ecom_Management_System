@@ -1,5 +1,6 @@
 package com.springboot.ecom.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -13,20 +14,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-
-import com.springboot.ecom.dto.ResponseMessageDto;
+import com.springboot.ecom.dto.ProductResponseDto;
+import com.springboot.ecom.exception.InvalidUsernameException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Category;
 import com.springboot.ecom.model.Product;
+import com.springboot.ecom.model.ProductImage;
 import com.springboot.ecom.model.Vendor;
 import com.springboot.ecom.service.CategoryService;
 import com.springboot.ecom.service.ProductService;
 import com.springboot.ecom.service.VendorService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class ProductController {
 
     @Autowired
@@ -39,76 +43,143 @@ public class ProductController {
     private CategoryService categoryService;
 
     @PostMapping("/product/add/{vendorId}/{categoryId}")
-    public ResponseEntity<?> addProductToCategory(@PathVariable int vendorId,
-                                                  @PathVariable int categoryId,
-                                                  @RequestBody Product product,
-                                                  ResponseMessageDto dto) {
-        Vendor vendor = null;
-        try {
-            vendor = vendorService.getVendorById(vendorId);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg("Vendor not found with id: " + vendorId);
-            return ResponseEntity.badRequest().body(dto);
-        }
-        Category category = null;
-        try {
-            category = categoryService.getCategoryById(categoryId);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg("Category not found with id: " + categoryId);
-            return ResponseEntity.badRequest().body(dto);
-        }
+    public ResponseEntity<?> addProduct(@PathVariable int vendorId,
+                                        @PathVariable int categoryId,
+                                        @RequestBody Product product) throws ResourceNotFoundException, InvalidUsernameException {
+        Vendor vendor = vendorService.getVendorById(vendorId);
+        Category category = categoryService.getCategoryById(categoryId);
+
         product.setCategory(category);
-        List<Vendor> vendors = new ArrayList<>();
-        vendors.add(vendor);
         product.setVendor(vendor);
-        try {
-            product = productService.addProductWithVendorAndCategory(product, vendor, categoryId);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg(e.getMessage());
-        }
-        return ResponseEntity.ok(product);
+        Product savedProduct = productService.addProductWithVendorAndCategory(product, vendor, category);
+        return ResponseEntity.ok(savedProduct);
     }
 
-    @GetMapping("/products/all")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> list = productService.getAllProducts();
-        return ResponseEntity.ok(list);
+
+    @PostMapping("/api/product/image/upload/{pid}")
+    public ProductImage uploadImage(@PathVariable int pid, @RequestParam MultipartFile file)
+            throws IOException, ResourceNotFoundException {
+
+        return productService.uploadImage(pid, file);
     }
+
+
+//    @GetMapping("/products/vendor/all")
+//    public ResponseEntity<?> getAllProductsByVendorId() throws ResourceNotFoundException {
+//        Set<Product> products = productService.getAllProductsByVendor();
+//        return ResponseEntity.ok(products);
+//    }
 
     @GetMapping("/product/category/{categoryId}")
-    public ResponseEntity<?> getProductsByCategory(@PathVariable int categoryId, ResponseMessageDto dto)
-    {
-        try {
-            Set<Product> list = productService.getProductsByCategoryId(categoryId);
-            return ResponseEntity.ok(list);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> getProductsByCategory(@PathVariable int categoryId) throws ResourceNotFoundException {
+        Set<Product> products = productService.getProductsByCategoryId(categoryId);
+        return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/product/getProduct/{id}")
-    public ResponseEntity<Product> getProductsById(@PathVariable int id) {
-        try {
-            return ResponseEntity.ok(productService.getProductById(id));
-        } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+    @GetMapping("/api/product/all")
+    public List<ProductResponseDto> getAllProducts() {
+        List<Product> pList =  productService.getAllProducts();
+        List<ProductImage> imageList= productService.getAllProductImages();
+
+        List<ProductResponseDto> listDto = new ArrayList<>();
+        for(Product p : pList) {
+            ProductResponseDto dto = new ProductResponseDto();
+            dto.setId(p.getId());
+            dto.setName(p.getName());
+            dto.setPrice(p.getPrice());
+            dto.setDescription(p.getDescription());
+
+            List<ProductImage> iList =
+                    imageList.stream()
+                            .filter(i->i.getProduct().getId() == p.getId())
+                            .toList();
+//            System.out.println(iList);
+            dto.setImages(iList);
+//            System.out.println(dto);
+            listDto.add(dto);
         }
+
+        return listDto;
     }
+
+    @GetMapping("/product/getProduct/{productId}")
+    public ResponseEntity<?> getAllProductById(@PathVariable int productId) throws ResourceNotFoundException {
+
+        Product product = productService.getProductById(productId);
+        List<ProductImage> imageList = productService.getAllProductImagesByProductId(productId);
+
+        List<ProductResponseDto> listDto = new ArrayList<>();
+        ProductResponseDto dto = new ProductResponseDto();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setStock(product.getStock());
+        dto.setPrice(product.getPrice());
+        dto.setDescription(product.getDescription());
+
+        List<ProductImage> iList =
+                imageList.stream()
+                        .filter(i -> i.getProduct().getId() == product.getId())
+                        .toList();
+        dto.setImages(iList);
+        listDto.add(dto);
+        return ResponseEntity.ok(listDto);
+    }
+
+//    @GetMapping("/products-with-images/{vendorId}")
+//    public ResponseEntity<?> getAllProductsAlongWithImagesForVendor(@PathVariable int vendorId) throws ResourceNotFoundException {
+//
+//        Set<Product> products = productService.getAllProductsByVendor();
+//
+//
+//        List<ProductImage> allImages = productService.getAllProductImages();
+//
+//        List<ProductResponseDto> responseDtoList = new ArrayList<>();
+//        for (Product product : products) {
+//            ProductResponseDto dto = new ProductResponseDto();
+//            dto.setId(product.getId());
+//            dto.setName(product.getName());
+//            dto.setPrice(product.getPrice());
+//            dto.setStock(product.getStock());
+//
+//            List<ProductImage> productImages = allImages.stream()
+//                    .filter(image -> image.getProduct().getId() == product.getId())
+//                    .toList();
+//            dto.setImages(productImages);
+//
+//            responseDtoList.add(dto);
+//        }
+//
+//        return ResponseEntity.ok(responseDtoList);
+//    }
+
+    @GetMapping("/product-images/{productId}")
+    public List<ProductImage> getProductImagesByProductId(@PathVariable int productId) throws ResourceNotFoundException {
+        return productService.getAllProductImagesByProductId(productId);
+    }
+
+
+    @PutMapping("/product/update/status/{productId}")
+    public ResponseEntity<?> updateFeaturedProduct(@PathVariable int productId) throws ResourceNotFoundException {
+        Product existingProduct = productService.getProductById(productId);
+
+        productService.updateFeaturedStatus(existingProduct);
+        return ResponseEntity.ok(existingProduct);
+    }
+
 
     @PutMapping("/product/update/{productId}")
     public ResponseEntity<?> updateProduct(@PathVariable int productId,
-                                           @RequestBody Product updatedProduct,
-                                           ResponseMessageDto dto) {
-        Product existingProduct = null;
-        try {
-            existingProduct = productService.getProductById(productId);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg("Product not found with id: " + productId);
-            return ResponseEntity.badRequest().body(dto);
-        }
+                                           @RequestBody Product updatedProduct) throws ResourceNotFoundException {
+        Product existingProduct = productService.getProductById(productId);
 
         if (updatedProduct.getName() != null) {
             existingProduct.setName(updatedProduct.getName());
+        }
+        if (updatedProduct.getDescription() != null) {
+            existingProduct.setDescription(updatedProduct.getDescription());
+        }
+        if (updatedProduct.getBrand() != null) {
+            existingProduct.setBrand(updatedProduct.getBrand());
         }
         if (updatedProduct.getPrice() > 0) {
             existingProduct.setPrice(updatedProduct.getPrice());
@@ -122,20 +193,9 @@ public class ProductController {
     }
 
     @DeleteMapping("product/delete/{id}")
-    public ResponseEntity<?> deleteVendor(@PathVariable int id, ResponseMessageDto dto)
-    {
-        try {
-            productService.getProductById(id);
-            productService.deleteById(id);
-        } catch (ResourceNotFoundException e) {
-            dto.setMsg(dto.getMsg());
-            return ResponseEntity.badRequest().body(dto);
-        }
-        dto.setMsg("Product deleted");
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<?> deleteProduct(@PathVariable int id) throws ResourceNotFoundException {
+        productService.getProductById(id);
+        productService.deleteById(id);
+        return ResponseEntity.ok("Product deleted");
     }
-    
-   
-    
-    
 }

@@ -11,18 +11,12 @@ import java.util.Set;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-    @Query("select p from Product p where p.vendor.id=:id")
-    Set<Product> findProductsByVendor(int id);
+    @Query("select p from Product p where p.vendor.user.username=:username")
+    Set<Product> findProductsByVendor(String username);
 
     @Query("select p from Product p where p.category.id=:categoryId")
     Set<Product> getAllProductsByCategoryId(int categoryId);
 
-    @Query("SELECT p.id, p.name, p.price, p.stock FROM Product p")
-	List<Product> findAllProductFields();
-    
-    
-    List<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
-
+    @Query("select p from Product p where p.featuredRequest='PENDING'")
+    List<Product> getAllFeaturedProducts();
 }
-
-

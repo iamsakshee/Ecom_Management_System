@@ -2,6 +2,9 @@ import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../../service/order.service';
+import { CartService } from '../../../service/cart.service';
+import { CustomerService } from '../../../service/customer.service';
+import { ProductService } from '../../../service/product.service';
 
 @Component({
   selector: 'app-product-checkout',
@@ -9,86 +12,88 @@ import { OrderService } from '../../../service/order.service';
   templateUrl: './product-checkout.component.html',
   styleUrl: './product-checkout.component.css'
 })
-export class CheckoutComponent implements OnInit {
-  totalAmount: number = 0;
-  paymentMethod: string = '';
-  isPaymentConfirmed: boolean = false;
-  customerId: any;
-  productId: any;
-  quantity: number = 1;
+export class ProductCheckoutComponent implements OnInit {
+
+  customerId: number | null = null;
+  productId: number | null = null;
+  quantity: number | null = null;
+  username: string | null = null; // Assuming you store the username in local storage
+  successMessage: any;
+  subtotal:any;
+  msg:any;
 
   constructor(
-    private route: ActivatedRoute, 
-    private router: Router,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private customerService: CustomerService, // For fetching customer ID
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to query parameters and extract the data
-    this.route.queryParams.subscribe(params => {
-      this.totalAmount = params['total']; // Get total amount from queryParams
-      this.customerId = params['customerId']; // Get customerId from queryParams
-      this.productId = params['productId']; // Get productId from queryParams
+    // Fetch username from local storage
+    this.username = localStorage.getItem('username');
+    console.log('Username:', this.username);
 
-      // Ensure that the parameters exist
-      console.log('Total Amount:', this.totalAmount);
-      console.log('Customer ID:', this.customerId);
-      console.log('Product ID:', this.productId);
+    // Fetch productId and quantity from the cart in local storage
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+      const cartArray = JSON.parse(cartData);
+      if (cartArray.length > 0) {
+        this.productId = cartArray[0].productId;
+        this.quantity = cartArray[0].quantity;
+        console.log('Fetched productId:', this.productId);
+        console.log('Fetched quantity:', this.quantity);
+      } else {
+        console.error('Cart is empty.');
+      }
+    } else {
+      console.error('No cart data found in local storage.');
+    }
+
+    // Fetch customer ID if username is available
+    if (this.username) {
+      this.fetchCustomerIdByUsername(this.username);
+    }
+  }
+
+
+  // Fetch the customer ID using the username
+  fetchCustomerIdByUsername(username: string): void {
+    this.customerService.getCustomerDetailsByUsername(username).subscribe({
+      next: (data) => {
+        this.customerId = data.customerId; // Assuming API returns { customerId: ... }
+        console.log('Customer ID fetched:', this.customerId);
+      },
+      error: (error) => {
+        console.error('Error fetching customer ID:', error);
+      }
     });
   }
 
-  // Method to handle payment method selection
-  selectPaymentMethod(method: string): void {
-    this.paymentMethod = method;
-  }
+  // Handle product purchase
+  processPayment(): void {
+    console.log('customerId:', this.customerId);
+console.log('productId:', this.productId);
+console.log('quantity:', this.quantity);
 
-  // Method to confirm the order after payment method selection
-  confirmOrder(): void {
-    if (this.paymentMethod) {
-      // Simulate order confirmation and payment processing
-      this.isPaymentConfirmed = true; // Payment is confirmed
-      alert(`Payment method selected: ${this.paymentMethod}. Your order is confirmed!`);
-
-      // Trigger the purchase API after confirmation
-      this.purchaseProduct(); 
-
-    } else {
-      alert('Please select a payment method');
+    // Ensure customerId, productId, and quantity are available
+    if (!this.customerId || !this.productId || !this.quantity) {
+      alert('Invalid customer, product ID, or quantity.');
+      return;
     }
-  }
 
-  // Method to simulate order processing and triggering the API
-  purchaseProduct(): void {
-    const quantity = this.quantity; // You can get the quantity dynamically if needed
-    console.log('Customer ID:', this.customerId);  
-    console.log('Product ID:', this.productId);    
-
-    if (!this.customerId || !this.productId) {
-      alert('Invalid customer or product ID');
-      return; 
-    }
+    console.log('Customer ID:', this.customerId);
+    console.log('Product ID:', this.productId);
+    console.log('Quantity:', this.quantity);
 
     // Call the purchase service to process the order
-    this.orderService.purchaseProduct(this.customerId, this.productId, quantity)
+    this.orderService.purchaseProduct(this.customerId, this.productId, this.quantity)
       .subscribe({
         next: (response: any) => {
-          alert(response.msg);  
-          this.router.navigate(['/cart']);  
+          console.log(response)
         },
         error: (error) => {
-          alert('Error: ' + error.error.msg);
+         
         }
       });
-  }
-
-  // Method to simulate payment and order confirmation
-  completePayment(): void {
-    if (this.isPaymentConfirmed) {
-      alert(`Payment confirmed using ${this.paymentMethod}. Thank you for your order!`);
-      // Navigate to a final confirmation or home page
-      this.router.navigate(['/']);
-    } else {
-      alert('Please confirm your payment method first.');
-    }
   }
 }

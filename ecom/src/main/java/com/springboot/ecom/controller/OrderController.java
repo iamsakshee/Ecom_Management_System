@@ -51,7 +51,7 @@ public class OrderController {
 			@RequestParam int quantity, ResponseMessageDto dto) throws ResourceNotFoundException {
 
 		Customer customer = customerService.validate(customerId);
-		Product product = productService.validate(productId);
+		Product product = productService.getProductById(productId);
 
 		if (product.getStock() < quantity) {
 			dto.setMsg("Insufficient stock for the product.");
