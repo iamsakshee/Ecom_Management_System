@@ -1,8 +1,12 @@
 package com.springboot.ecom.utils;
 
+import com.springboot.ecom.exception.ResourceNotFoundException;
+import com.springboot.ecom.model.User;
+import com.springboot.ecom.service.UserSecurityService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -13,6 +17,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
+    @Autowired
+    private UserSecurityService userSecurityService;
 
     private String SECRET_KEY = "secret";
 
@@ -37,7 +43,11 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username) throws ResourceNotFoundException {
+        User user = (User) userSecurityService.loadUserByUsername(username);
+        if (!user.isEnabled()) {
+            throw new ResourceNotFoundException("user is disabled. Please let the admin enable");
+        }
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
     }
@@ -57,5 +67,4 @@ public class JwtUtil {
         final String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
-
 }

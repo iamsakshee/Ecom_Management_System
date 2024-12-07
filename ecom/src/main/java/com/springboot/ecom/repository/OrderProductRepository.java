@@ -18,7 +18,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
             "JOIN op.order o " +
             "JOIN op.product p " +
             "JOIN o.customer c " +
-            "WHERE p.user.id = :vendorId AND o.orderStatus = :orderStatus")
+            "WHERE p.vendor.id = :vendorId AND o.orderStatus = :orderStatus")
     List<Object[]> findProductsForVendorWithStatus(@Param("vendorId") int vendorId, @Param("orderStatus") OrderStatus orderStatus);
 
     @Query("select op.order.id as order_id, op.order.orderDate as order_date, " +
@@ -29,6 +29,6 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
             "JOIN op.order o " +
             "JOIN op.product p " +
             "JOIN o.customer c " +
-            "WHERE p.user.id = :vendorId")
+            "WHERE p.vendor.id = :vendorId")
     List<Object[]> findAllOrdersForVendor(@Param("vendorId") int vendorId);
 }

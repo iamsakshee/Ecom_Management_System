@@ -27,13 +27,12 @@ public class UserService {
         if (optional.isPresent()) {
             throw new InvalidUsernameException("Username already in use");
         }
-        user.setRole(Role.CUSTOMER);
-//        if (Role.VENDOR.equals(user.getRole())) {
-//            user.setEnabled(false);
-//        } else {
-//            user.setEnabled(true);
-//        }
-        user.setRegistrationDate(LocalDate.now());
+        user.setRole(Role.VENDOR);
+        if (Role.VENDOR.equals(user.getRole())) {
+            user.setEnabled(false);
+        } else {
+            user.setEnabled(true);
+        }
         String encryptedPass = passEncoder.encode(user.getPassword());
         user.setPassword(encryptedPass);
         return userRepository.save(user);

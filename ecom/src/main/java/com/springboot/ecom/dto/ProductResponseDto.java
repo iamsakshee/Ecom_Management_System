@@ -11,26 +11,18 @@ public class ProductResponseDto {
     private Double price;
     private int stock;
 
-    private List<ProductImage> productImageList;
+    private String brand;
+    private List<ProductImage> images;
 
     public ProductResponseDto() {
-
     }
 
-    public List<ProductImage> getProductImageList() {
-        return productImageList;
+    public List<ProductImage> getImages() {
+        return images;
     }
 
-    public void setProductImageList(List<ProductImage> productImageList) {
-        this.productImageList = productImageList;
-    }
-
-    public ProductResponseDto(int id, String name, Double price, int stock) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
     }
 
     public int getId() {
@@ -47,6 +39,14 @@ public class ProductResponseDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public Double getPrice() {

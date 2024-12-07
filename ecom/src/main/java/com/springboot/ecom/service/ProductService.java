@@ -2,15 +2,10 @@ package com.springboot.ecom.service;
 
 import com.springboot.ecom.enums.FeaturedRequest;
 import com.springboot.ecom.exception.ResourceNotFoundException;
-import com.springboot.ecom.model.Category;
-import com.springboot.ecom.model.Product;
-import com.springboot.ecom.model.ProductImage;
-import com.springboot.ecom.model.User;
-import com.springboot.ecom.repository.CategoryRepository;
-import com.springboot.ecom.repository.ProductImageRepository;
-import com.springboot.ecom.repository.ProductRepository;
-import com.springboot.ecom.repository.UserRepository;
+import com.springboot.ecom.model.*;
+import com.springboot.ecom.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,28 +22,29 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private VendorService vendorService;
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
     private ProductImageRepository productImageRepository;
+    @Autowired
+    private VendorRepository vendorRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public Product addProductWithVendorAndCategory(Product product, User user, int categoryId) throws ResourceNotFoundException {
-        Category category = categoryService.getCategoryById(categoryId);
-        if (category == null) {
-            throw new ResourceNotFoundException("Category not found with id: " + categoryId);
-        }
+    public Product addProductWithVendorAndCategory(Product product, Vendor vendor, Category category) throws ResourceNotFoundException {
+
         product.setCategory(category);
-        product.setUser(user);
+        product.setVendor(vendor);
         product.setFeaturedRequest(FeaturedRequest.NOTMADE);
         return productRepository.save(product);
     }
@@ -64,19 +60,6 @@ public class ProductService {
         }
         return optional.get();
     }
-
-    public Set<Product> findProductsByUser(int id) throws ResourceNotFoundException {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid vendor id "));
-
-        Set<Product> products = productRepository.findProductsByVendor(id);
-
-        if (products == null || products.isEmpty()) {
-            throw new ResourceNotFoundException("No products found for this vendor");
-        }
-        return products;
-    }
-
 
     public Product updateProduct(Product existingProduct) {
         return productRepository.save(existingProduct);
@@ -103,12 +86,13 @@ public class ProductService {
         return products;
     }
 
-    public Set<Product> getAllProductsByUser(int userId) throws ResourceNotFoundException {
+    public Set<Product> getAllProductsByVendor() throws ResourceNotFoundException {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid vendor"));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        Set<Product> products = productRepository.findProductsByVendor(userId);
+        User user = userService.findByUsername(username);
+
+        Set<Product> products = productRepository.findProductsByVendor(username);
 
         if (products == null || products.isEmpty()) {
             throw new ResourceNotFoundException("No products found for this vendor");
@@ -116,7 +100,7 @@ public class ProductService {
         return products;
     }
 
-    private ProductImage addProductImage(ProductImage productImage) {
+    public ProductImage addProductImage(ProductImage productImage) {
         return productImageRepository.save(productImage);
     }
 
@@ -124,12 +108,9 @@ public class ProductService {
         System.out.println(file.getOriginalFilename());
         String location = "E:/Palash/Angular/ecommerce-frontend/public/images";
         Path path = Path.of(location, file.getOriginalFilename());
-        //System.out.println(path.toString());
-        try {
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw e;
-        }
+
+        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
 
         Product product = null;
         try {
@@ -144,6 +125,14 @@ public class ProductService {
         pi.setProduct(product);
 
         return addProductImage(pi);
+    }
+
+    public List<ProductImage> getAllProductImagesByProductId(int productId) throws ResourceNotFoundException {
+        List<ProductImage> productImages = productImageRepository.findProductImagesByProductId(productId);
+        if (productImages.isEmpty()) {
+            throw new ResourceNotFoundException("no images found for this product");
+        }
+        return productImages;
     }
 
     public List<ProductImage> getAllProductImages() {

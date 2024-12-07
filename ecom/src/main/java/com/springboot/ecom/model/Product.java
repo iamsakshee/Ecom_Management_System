@@ -14,14 +14,18 @@ public class Product {
     @Column(length = 500)
     private String description;
 
+    private String brand;
+
     private double price;
+
 
     private int stock;
     @ManyToOne
-    private User user;
+    private Vendor vendor;
 
     @ManyToOne
     private Category category;
+
     @Enumerated(EnumType.STRING)
     private FeaturedRequest featuredRequest;
 
@@ -49,6 +53,14 @@ public class Product {
         this.description = description;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -65,12 +77,12 @@ public class Product {
         this.stock = stock;
     }
 
-    public User getUser() {
-        return user;
+    public Vendor getVendor() {
+        return vendor;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
     }
 
     public FeaturedRequest getFeaturedRequest() {

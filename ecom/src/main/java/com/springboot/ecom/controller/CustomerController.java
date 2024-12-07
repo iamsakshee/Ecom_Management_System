@@ -2,6 +2,7 @@ package com.springboot.ecom.controller;
 
 import com.springboot.ecom.dto.ProductResponseDto;
 import com.springboot.ecom.dto.ResponseMessageDto;
+import com.springboot.ecom.exception.DuplicateEntryException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
 import com.springboot.ecom.model.Product;
@@ -30,7 +31,7 @@ public class CustomerController {
     private ProductService productService;
 
     @PostMapping("/customer/add")
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customer, ResponseMessageDto dto) {
+    public ResponseEntity<?> addCustomer(@RequestBody Customer customer, ResponseMessageDto dto) throws DuplicateEntryException {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(username);
@@ -52,19 +53,6 @@ public class CustomerController {
 
     }
 
-//    @GetMapping("/customer/zipcode/get")
-//    public ResponseEntity<?> getCustomerByZipcode(@RequestParam String code) {
-//        try {
-//            Integer zipcode = Integer.parseInt(code);
-//
-//            List<Customer> list = customerService.getCustomerByZipcode(zipcode);
-//            return ResponseEntity.ok(list);
-//        } catch (NumberFormatException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//
-//    }
-
     @PutMapping("/customer/update/{id}")
     public ResponseEntity<?> updateCustomer(@PathVariable int id, @RequestBody Customer newCustomer,
                                             ResponseMessageDto dto) throws ResourceNotFoundException {
@@ -84,13 +72,13 @@ public class CustomerController {
 
     }
 
-    @GetMapping("/customer/product/get")
-    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        List<ProductResponseDto> productDtos = products.stream().map(product -> new ProductResponseDto(product.getId(),
-                product.getName(), product.getPrice(), product.getStock())).collect(Collectors.toList());
-
-        return ResponseEntity.ok(productDtos);
-    }
+//    @GetMapping("/customer/product/get")
+//    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
+//        List<Product> products = productService.getAllProducts();
+//        List<ProductResponseDto> productDtos = products.stream().map(product -> new ProductResponseDto(product.getId(),
+//                product.getName(), product.getPrice(), product.getStock())).collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(productDtos);
+//    }
 
 }

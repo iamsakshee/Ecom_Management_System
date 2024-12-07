@@ -11,8 +11,8 @@ import java.util.Set;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-    @Query("select p from Product p where p.user.id=:id")
-    Set<Product> findProductsByVendor(int id);
+    @Query("select p from Product p where p.vendor.user.username=:username")
+    Set<Product> findProductsByVendor(String username);
 
     @Query("select p from Product p where p.category.id=:categoryId")
     Set<Product> getAllProductsByCategoryId(int categoryId);

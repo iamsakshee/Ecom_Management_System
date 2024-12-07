@@ -1,5 +1,6 @@
 package com.springboot.ecom.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,7 +12,9 @@ public class ProductImage {
     private String fileName;
 
     private String path;
-    @ManyToOne
+
+    @JsonIgnore
+    @OneToOne
     private Product product;
 
     public int getId() {

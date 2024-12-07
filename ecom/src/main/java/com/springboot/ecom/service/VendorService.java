@@ -1,10 +1,19 @@
 package com.springboot.ecom.service;
 
+import com.springboot.ecom.exception.DuplicateEntryException;
+import com.springboot.ecom.exception.ResourceNotFoundException;
+import com.springboot.ecom.model.User;
+import com.springboot.ecom.model.Vendor;
 import com.springboot.ecom.repository.ProductRepository;
 import com.springboot.ecom.repository.UserRepository;
 import com.springboot.ecom.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VendorService {
@@ -17,50 +26,53 @@ public class VendorService {
     @Autowired
     private ProductRepository productRepository;
 
-//    public Vendor saveVendor(Vendor vendor) {
-//        return vendorRepository.save(vendor);
-//    }
+    @Autowired
+    private UserService userService;
+
+    public Vendor saveVendor(Vendor vendor) {
+        return vendorRepository.save(vendor);
+    }
 
 
+    public Vendor addVendor(Vendor vendor) throws ResourceNotFoundException, DuplicateEntryException {
 
-//    public Vendor addVendor(Vendor vendor) throws ResourceNotFoundException, DuplicateEntryException {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//
-//        if (vendorRepository.existsByEmail(vendor.getEmail())) {
-//            throw new DuplicateEntryException("Email already exists" );
-//        }
-//
-//        if (vendorRepository.existsByPhone(vendor.getPhone())) {
-//            throw new DuplicateEntryException("Phone number already exists");
-//        }
-//
-//        if (vendorRepository.existsByGstNumber(vendor.getGstNumber())) {
-//            throw new DuplicateEntryException("GST number already exists");
-//        }
-//
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
-//
-//        vendor.setRegistrationDate(LocalDate.now());
-//        vendor.set(user);
-//
-//        return vendorRepository.save(vendor);
-//    }
+        if (vendorRepository.existsByUser(vendor.getUser())) {
+            throw new DuplicateEntryException("A vendor is already associated with this user.");
+        }
+        if (vendorRepository.existsByEmail(vendor.getEmail())) {
+            throw new DuplicateEntryException("Email already exists");
+        }
+
+        if (vendorRepository.existsByPhone(vendor.getPhone())) {
+            throw new DuplicateEntryException("Phone number already exists");
+        }
+
+        if (vendorRepository.existsByGstNumber(vendor.getGstNumber())) {
+            throw new DuplicateEntryException("GST number already exists");
+        }
+
+        vendor.setRegistrationDate(LocalDate.now());
+
+        return vendorRepository.save(vendor);
+    }
 
 
-//    public List<Vendor> getAllVendors() {
-//        return vendorRepository.findAll();
-//    }
-//
-//    public Vendor getVendorById(int id) throws ResourceNotFoundException {
-//        Optional<Vendor> optional = vendorRepository.findById(id);
-//        if (optional.isEmpty()) {
-//            throw new ResourceNotFoundException("Vendor id invalid");
-//        }
-//        return optional.get();
-//    }
+    public List<Vendor> getAllVendors() {
+        return vendorRepository.findAll();
+    }
 
-//    public void deleteById(int id) {
-//        vendorRepository.deleteById(id);
-//    }
+    public Vendor getVendorById(int id) throws ResourceNotFoundException {
+
+        return vendorRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("invalid vendor id")
+        );
+    }
+
+    public void deleteById(int id) {
+        vendorRepository.deleteById(id);
+    }
+
+    public Vendor getVendorDetailsByUsername(String username) {
+        return vendorRepository.getVendorDetailsByUsername(username);
+    }
 }

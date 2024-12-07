@@ -4,27 +4,25 @@ import com.springboot.ecom.model.Category;
 import com.springboot.ecom.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping("/category/getAll")
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<?> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
     @PostMapping("/category/create")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) throws Exception {
+    public ResponseEntity<?> createCategory(@RequestBody Category category) throws Exception {
         Category savedCategory = categoryService.createCategory(category);
         return ResponseEntity.ok(savedCategory);
     }

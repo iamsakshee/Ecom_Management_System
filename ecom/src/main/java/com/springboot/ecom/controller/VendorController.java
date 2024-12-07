@@ -1,13 +1,17 @@
 package com.springboot.ecom.controller;
 
+import com.springboot.ecom.dto.ResponseMessageDto;
 import com.springboot.ecom.dto.VendorOrderProductDto;
 import com.springboot.ecom.enums.OrderStatus;
+import com.springboot.ecom.exception.DuplicateEntryException;
 import com.springboot.ecom.exception.InvalidUsernameException;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.User;
+import com.springboot.ecom.model.Vendor;
 import com.springboot.ecom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,30 +36,46 @@ public class VendorController {
     @Autowired
     private OrderService orderService;
 
-    @PutMapping("/vendor/update/{id}")
-    public ResponseEntity<?> updateVendor(@PathVariable int id, @RequestBody User newUser) throws ResourceNotFoundException, InvalidUsernameException {
-        User existingUser = userService.findByUserId(id);
-        if (newUser.getCompanyName() != null) {
-            existingUser.setCompanyName(newUser.getCompanyName());
+    @PostMapping("/vendor/add")
+    public ResponseEntity<?> addVendor(@RequestBody Vendor vendor, ResponseMessageDto dto) throws ResourceNotFoundException, DuplicateEntryException {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(username);
+        vendor.setUser(user);
+        vendorService.addVendor(vendor);
+        return ResponseEntity.ok(vendor);
+    }
+
+    @GetMapping("vendor/getDetails")
+    public Vendor getVendorDetails(@RequestParam String username)
+    {
+        return vendorService.getVendorDetailsByUsername(username);
+    }
+
+    @PostMapping("/vendor/update/{id}")
+    public ResponseEntity<?> updateVendor(@RequestBody Vendor newVendor, @PathVariable int id) throws ResourceNotFoundException, InvalidUsernameException {
+        Vendor existingVendor = vendorService.getVendorById(id);
+        if (newVendor.getCompanyName() != null) {
+            existingVendor.setCompanyName(newVendor.getCompanyName());
         }
-        if (newUser.getEmail() != null) {
-            existingUser.setEmail(newUser.getEmail());
+        if (newVendor.getEmail() != null) {
+            existingVendor.setEmail(newVendor.getEmail());
         }
-        if (newUser.getPhone() != null) {
-            existingUser.setPhone(newUser.getPhone());
+        if (newVendor.getPhone() != null) {
+            existingVendor.setPhone(newVendor.getPhone());
         }
-        if (newUser.getAddress() != null) {
-            existingUser.setAddress(newUser.getAddress());
+        if (newVendor.getAddress() != null) {
+            existingVendor.setAddress(newVendor.getAddress());
         }
-        existingUser = userService.saveUser(existingUser);
-        return ResponseEntity.ok(existingUser);
+        newVendor = vendorService.saveVendor(existingVendor);
+        return ResponseEntity.ok(newVendor);
     }
 
 
     @DeleteMapping("vendor/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id) throws ResourceNotFoundException, InvalidUsernameException {
-        userService.findByUserId(id);
-        userService.deleteById(id);
+        vendorService.getVendorById(id);
+        vendorService.deleteById(id);
         return ResponseEntity.ok("Vendor deleted");
     }
 
@@ -71,6 +91,11 @@ public class VendorController {
         } else {
             return ResponseEntity.ok(orders);
         }
+    }
+
+    @GetMapping("/vendor/all")
+    public List<Vendor> getAllVendors() {
+        return vendorService.getAllVendors();
     }
 
     @GetMapping("/orders/{vendorId}")

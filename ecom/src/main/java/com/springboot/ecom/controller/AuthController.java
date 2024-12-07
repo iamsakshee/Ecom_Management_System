@@ -2,6 +2,7 @@ package com.springboot.ecom.controller;
 
 import com.springboot.ecom.dto.JwtDto;
 import com.springboot.ecom.exception.InvalidUsernameException;
+import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.User;
 import com.springboot.ecom.service.UserSecurityService;
 import com.springboot.ecom.service.UserService;
@@ -29,11 +30,12 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/api/token")
-    public ResponseEntity<JwtDto> getToken(@RequestBody User user, JwtDto dto) {
+    public ResponseEntity<JwtDto> getToken(@RequestBody User user, JwtDto dto) throws ResourceNotFoundException {
         Authentication auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         authenticationManager.authenticate(auth);
 
         user = (User) userSecurityService.loadUserByUsername(user.getUsername());
+
         String jwt = jwtUtil.generateToken(user.getUsername());
         dto.setUsername(user.getUsername());
         dto.setToken(jwt);
@@ -45,6 +47,7 @@ public class AuthController {
         User savedUser = userService.signup(user);
         return ResponseEntity.ok(savedUser);
     }
+
     @GetMapping("/auth/user")
     public User getUserDetails(Principal principal) {
         String loggedInUserName = principal.getName();

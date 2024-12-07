@@ -28,22 +28,6 @@ public class User implements UserDetails {
     private Role role;
     private boolean enabled = true;
 
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false)
-    private String companyName;
-    @Column(nullable = false, unique = true)
-    private String email;
-    @Column(nullable = false, unique = true)
-    private String phone;
-    @Column(length = 1000, nullable = false)
-    private String address;
-
-    @Column(unique = true, nullable = false)
-    private String gstNumber;
-
-    private LocalDate registrationDate;
-
     public int getId() {
         return id;
     }
@@ -108,61 +92,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getGstNumber() {
-        return gstNumber;
-    }
-
-    public void setGstNumber(String gstNumber) {
-        this.gstNumber = gstNumber;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
     }
 }

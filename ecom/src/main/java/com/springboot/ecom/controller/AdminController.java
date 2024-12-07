@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class AdminController {
 
     @Autowired
@@ -35,21 +36,21 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/admin/getAllProducts")
-    public List<Product> getAllProducts() throws ResourceNotFoundException {
-        return adminService.getAllProducts();
-    }
-
-    @GetMapping("/admin/getFeaturedProducts")
-    public List<Product> getAllFeaturedProductRequests() throws ResourceNotFoundException {
-        return adminService.getAllProducts();
-    }
-
-    @PutMapping("/admin/approve/product/{productId}")
-    public ResponseEntity<?> updateFeaturedProduct(@PathVariable int productId) throws ResourceNotFoundException {
-        Product existingProduct = productService.getProductById(productId);
-
-        adminService.updateFeaturedStatus(existingProduct);
-        return ResponseEntity.ok(existingProduct);
-    }
+//    @GetMapping("/admin/getAllProducts")
+//    public List<Product> getAllProducts() throws ResourceNotFoundException {
+//        return adminService.getAllProducts();
+//    }
+//
+//    @GetMapping("/admin/getFeaturedProducts")
+//    public List<Product> getAllFeaturedProductRequests() throws ResourceNotFoundException {
+//        return adminService.getAllFeaturedProducts();
+//    }
+//
+//    @PutMapping("/admin/approve/product/{productId}")
+//    public ResponseEntity<?> updateFeaturedProduct(@PathVariable int productId) throws ResourceNotFoundException {
+//        Product existingProduct = productService.getProductById(productId);
+//
+//        adminService.updateFeaturedStatus(existingProduct);
+//        return ResponseEntity.ok(existingProduct);
+//    }
 }
