@@ -19,14 +19,15 @@ export class ProductCheckoutComponent implements OnInit {
   quantity: number | null = null;
   username: string | null = null; // Assuming you store the username in local storage
   successMessage: any;
-  subtotal:any;
-  msg:any;
+  subTotal: any;
+  total: any;
+  msg: any;
 
   constructor(
     private orderService: OrderService,
     private customerService: CustomerService, // For fetching customer ID
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Fetch username from local storage
@@ -40,8 +41,11 @@ export class ProductCheckoutComponent implements OnInit {
       if (cartArray.length > 0) {
         this.productId = cartArray[0].productId;
         this.quantity = cartArray[0].quantity;
+        this.subTotal = cartArray[0].subTotal;
+        this.total = cartArray[0].total;
         console.log('Fetched productId:', this.productId);
         console.log('Fetched quantity:', this.quantity);
+        console.log('fetched subtotal', this.subTotal)
       } else {
         console.error('Cart is empty.');
       }
@@ -72,8 +76,8 @@ export class ProductCheckoutComponent implements OnInit {
   // Handle product purchase
   processPayment(): void {
     console.log('customerId:', this.customerId);
-console.log('productId:', this.productId);
-console.log('quantity:', this.quantity);
+    console.log('productId:', this.productId);
+    console.log('quantity:', this.quantity);
 
     // Ensure customerId, productId, and quantity are available
     if (!this.customerId || !this.productId || !this.quantity) {
@@ -89,10 +93,11 @@ console.log('quantity:', this.quantity);
     this.orderService.purchaseProduct(this.customerId, this.productId, this.quantity)
       .subscribe({
         next: (response: any) => {
+          this.successMessage = response.msg;
           console.log(response)
         },
         error: (error) => {
-         
+
         }
       });
   }

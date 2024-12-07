@@ -10,4 +10,6 @@ import com.springboot.ecom.model.Wishlist;
 public interface WishlistRepository extends JpaRepository<Wishlist, Integer>{
 
 	Optional<Wishlist> findByCustomer(Customer customer);
+	
+	 
 }

@@ -20,6 +20,11 @@ export class DashboardPageComponent implements OnInit {
   customerId: any;
   successMessage: string = '';
   errorMessage: string = '';
+  data:any[] = []
+  page:number=0;
+  size:number=7;
+  totalElements: number = 0;
+  pageArray:any[] =[];
 
   
   constructor(private productService: ProductService, 
@@ -34,18 +39,25 @@ export class DashboardPageComponent implements OnInit {
 
   // Fetch all products
   getAllProducts(): void {
-    this.productService.getAllProducts().subscribe({
-      next: (data) => {
-        this.products = data;
+    this.productService.getAllProducts(this.page,this.size).subscribe({
+      next: (resp) => {
+        this.data = resp.content; // Assuming 'content' contains the products
+      this.products = resp.content; 
+        this.totalElements = resp.totalElements;
+        let totalPages = this.totalElements / this.size;
+        let i=1; 
+        this.pageArray = [];
+        while(totalPages > 0){
+          this.pageArray.push(i)
+          totalPages = totalPages - 1;
+          i++;
+        }
+        console.log("page" + this.pageArray)
         this.products.forEach(p=>{
           p.images.forEach((i:any) => {
             i.path = './images/'+ i.fileName
-          });
-        })
-        console.log(this.products)
-        
-       
-      },
+          }); })
+          },
       error: (error) => {
         console.error('There was an error fetching the products!', error);
       }
@@ -80,7 +92,24 @@ export class DashboardPageComponent implements OnInit {
       })
     }
   }
+
+  prev(){
+    if(this.page >0){
+     this.page = this.page - 1 
+     this.getAllProducts() 
+   }
+       
+  }
+  next(){
+   this.page = this.page + 1 
+   this.getAllProducts()
+  }
+  onClick(i:number){
+     this.page = i
+     this.getAllProducts()
+  }
 }
+
       
   
 

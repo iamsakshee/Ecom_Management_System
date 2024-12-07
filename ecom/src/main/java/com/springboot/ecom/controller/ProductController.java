@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,39 +34,36 @@ import com.springboot.ecom.service.ProductService;
 import com.springboot.ecom.service.VendorService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = { "http://localhost:4200" })
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-    @Autowired
-    private VendorService vendorService;
+	@Autowired
+	private VendorService vendorService;
 
-    @Autowired
-    private CategoryService categoryService;
+	@Autowired
+	private CategoryService categoryService;
 
-    @PostMapping("/product/add/{vendorId}/{categoryId}")
-    public ResponseEntity<?> addProduct(@PathVariable int vendorId,
-                                        @PathVariable int categoryId,
-                                        @RequestBody Product product) throws ResourceNotFoundException, InvalidUsernameException {
-        Vendor vendor = vendorService.getVendorById(vendorId);
-        Category category = categoryService.getCategoryById(categoryId);
+	@PostMapping("/product/add/{vendorId}/{categoryId}")
+	public ResponseEntity<?> addProduct(@PathVariable int vendorId, @PathVariable int categoryId,
+			@RequestBody Product product) throws ResourceNotFoundException, InvalidUsernameException {
+		Vendor vendor = vendorService.getVendorById(vendorId);
+		Category category = categoryService.getCategoryById(categoryId);
 
-        product.setCategory(category);
-        product.setVendor(vendor);
-        Product savedProduct = productService.addProductWithVendorAndCategory(product, vendor, category);
-        return ResponseEntity.ok(savedProduct);
-    }
+		product.setCategory(category);
+		product.setVendor(vendor);
+		Product savedProduct = productService.addProductWithVendorAndCategory(product, vendor, category);
+		return ResponseEntity.ok(savedProduct);
+	}
 
+	@PostMapping("/api/product/image/upload/{pid}")
+	public ProductImage uploadImage(@PathVariable int pid, @RequestParam MultipartFile file)
+			throws IOException, ResourceNotFoundException {
 
-    @PostMapping("/api/product/image/upload/{pid}")
-    public ProductImage uploadImage(@PathVariable int pid, @RequestParam MultipartFile file)
-            throws IOException, ResourceNotFoundException {
-
-        return productService.uploadImage(pid, file);
-    }
-
+		return productService.uploadImage(pid, file);
+	}
 
 //    @GetMapping("/products/vendor/all")
 //    public ResponseEntity<?> getAllProductsByVendorId() throws ResourceNotFoundException {
@@ -70,60 +71,65 @@ public class ProductController {
 //        return ResponseEntity.ok(products);
 //    }
 
-    @GetMapping("/product/category/{categoryId}")
-    public ResponseEntity<?> getProductsByCategory(@PathVariable int categoryId) throws ResourceNotFoundException {
-        Set<Product> products = productService.getProductsByCategoryId(categoryId);
-        return ResponseEntity.ok(products);
-    }
+	@GetMapping("/product/category/{categoryId}")
+	public ResponseEntity<?> getProductsByCategory(@PathVariable int categoryId) throws ResourceNotFoundException {
+		Set<Product> products = productService.getProductsByCategoryId(categoryId);
+		return ResponseEntity.ok(products);
+	}
 
-    @GetMapping("/api/product/all")
-    public List<ProductResponseDto> getAllProducts() {
-        List<Product> pList =  productService.getAllProducts();
-        List<ProductImage> imageList= productService.getAllProductImages();
+	@GetMapping("/api/product/all")
+	public Page<ProductResponseDto> getAllProducts(@RequestParam(required = false, defaultValue = "0") String page,
+			@RequestParam(required = false, defaultValue = "1000000") String size) throws Exception{
 
-        List<ProductResponseDto> listDto = new ArrayList<>();
-        for(Product p : pList) {
-            ProductResponseDto dto = new ProductResponseDto();
-            dto.setId(p.getId());
-            dto.setName(p.getName());
-            dto.setPrice(p.getPrice());
-            dto.setDescription(p.getDescription());
+		Pageable pageable = null;
 
-            List<ProductImage> iList =
-                    imageList.stream()
-                            .filter(i->i.getProduct().getId() == p.getId())
-                            .toList();
+		try {
+			pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
+		} catch (Exception e) {
+			throw e;
+		}
+
+		Page<Product> pPage = productService.getAllProducts(pageable);
+		List<Product> pList = pPage.getContent();
+		List<ProductImage> imageList = productService.getAllProductImages();
+
+		List<ProductResponseDto> listDto = new ArrayList<>();
+		for (Product p : pList) {
+			ProductResponseDto dto = new ProductResponseDto();
+			dto.setId(p.getId());
+			dto.setName(p.getName());
+			dto.setPrice(p.getPrice());
+			dto.setDescription(p.getDescription());
+
+			List<ProductImage> iList = imageList.stream().filter(i -> i.getProduct().getId() == p.getId()).toList();
 //            System.out.println(iList);
-            dto.setImages(iList);
+			dto.setImages(iList);
 //            System.out.println(dto);
-            listDto.add(dto);
-        }
+			listDto.add(dto);
+		}
 
-        return listDto;
-    }
+		 return new PageImpl<>(listDto, pageable, pPage.getTotalElements());
+	}
 
-    @GetMapping("/product/getProduct/{productId}")
-    public ResponseEntity<?> getAllProductById(@PathVariable int productId) throws ResourceNotFoundException {
+	@GetMapping("/product/getProduct/{productId}")
+	public ResponseEntity<?> getAllProductById(@PathVariable int productId) throws ResourceNotFoundException {
 
-        Product product = productService.getProductById(productId);
-        List<ProductImage> imageList = productService.getAllProductImagesByProductId(productId);
+		Product product = productService.getProductById(productId);
+		List<ProductImage> imageList = productService.getAllProductImagesByProductId(productId);
 
-        List<ProductResponseDto> listDto = new ArrayList<>();
-        ProductResponseDto dto = new ProductResponseDto();
-        dto.setId(product.getId());
-        dto.setName(product.getName());
-        dto.setStock(product.getStock());
-        dto.setPrice(product.getPrice());
-        dto.setDescription(product.getDescription());
+		List<ProductResponseDto> listDto = new ArrayList<>();
+		ProductResponseDto dto = new ProductResponseDto();
+		dto.setId(product.getId());
+		dto.setName(product.getName());
+		dto.setStock(product.getStock());
+		dto.setPrice(product.getPrice());
+		dto.setDescription(product.getDescription());
 
-        List<ProductImage> iList =
-                imageList.stream()
-                        .filter(i -> i.getProduct().getId() == product.getId())
-                        .toList();
-        dto.setImages(iList);
-        listDto.add(dto);
-        return ResponseEntity.ok(listDto);
-    }
+		List<ProductImage> iList = imageList.stream().filter(i -> i.getProduct().getId() == product.getId()).toList();
+		dto.setImages(iList);
+		listDto.add(dto);
+		return ResponseEntity.ok(listDto);
+	}
 
 //    @GetMapping("/products-with-images/{vendorId}")
 //    public ResponseEntity<?> getAllProductsAlongWithImagesForVendor(@PathVariable int vendorId) throws ResourceNotFoundException {
@@ -152,50 +158,45 @@ public class ProductController {
 //        return ResponseEntity.ok(responseDtoList);
 //    }
 
-    @GetMapping("/product-images/{productId}")
-    public List<ProductImage> getProductImagesByProductId(@PathVariable int productId) throws ResourceNotFoundException {
-        return productService.getAllProductImagesByProductId(productId);
-    }
+	@GetMapping("/product-images/{productId}")
+	public List<ProductImage> getProductImagesByProductId(@PathVariable int productId)
+			throws ResourceNotFoundException {
+		return productService.getAllProductImagesByProductId(productId);
+	}
 
+	@PutMapping("/product/update/status/{productId}")
+	public ResponseEntity<?> updateFeaturedProduct(@PathVariable int productId) throws ResourceNotFoundException {
+		Product existingProduct = productService.getProductById(productId);
 
-    @PutMapping("/product/update/status/{productId}")
-    public ResponseEntity<?> updateFeaturedProduct(@PathVariable int productId) throws ResourceNotFoundException {
-        Product existingProduct = productService.getProductById(productId);
+		return ResponseEntity.ok(existingProduct);
+	}
 
-        productService.updateFeaturedStatus(existingProduct);
-        return ResponseEntity.ok(existingProduct);
-    }
+	@PutMapping("/product/update/{productId}")
+	public ResponseEntity<?> updateProduct(@PathVariable int productId, @RequestBody Product updatedProduct)
+			throws ResourceNotFoundException {
+		Product existingProduct = productService.getProductById(productId);
 
+		if (updatedProduct.getName() != null) {
+			existingProduct.setName(updatedProduct.getName());
+		}
+		if (updatedProduct.getDescription() != null) {
+			existingProduct.setDescription(updatedProduct.getDescription());
+		}
+		if (updatedProduct.getPrice() > 0) {
+			existingProduct.setPrice(updatedProduct.getPrice());
+		}
+		if (updatedProduct.getStock() >= 0) {
+			existingProduct.setStock(updatedProduct.getStock());
+		}
 
-    @PutMapping("/product/update/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable int productId,
-                                           @RequestBody Product updatedProduct) throws ResourceNotFoundException {
-        Product existingProduct = productService.getProductById(productId);
+		Product updated = productService.updateProduct(existingProduct);
+		return ResponseEntity.ok(updated);
+	}
 
-        if (updatedProduct.getName() != null) {
-            existingProduct.setName(updatedProduct.getName());
-        }
-        if (updatedProduct.getDescription() != null) {
-            existingProduct.setDescription(updatedProduct.getDescription());
-        }
-        if (updatedProduct.getBrand() != null) {
-            existingProduct.setBrand(updatedProduct.getBrand());
-        }
-        if (updatedProduct.getPrice() > 0) {
-            existingProduct.setPrice(updatedProduct.getPrice());
-        }
-        if (updatedProduct.getStock() >= 0) {
-            existingProduct.setStock(updatedProduct.getStock());
-        }
-
-        Product updated = productService.updateProduct(existingProduct);
-        return ResponseEntity.ok(updated);
-    }
-
-    @DeleteMapping("product/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable int id) throws ResourceNotFoundException {
-        productService.getProductById(id);
-        productService.deleteById(id);
-        return ResponseEntity.ok("Product deleted");
-    }
+	@DeleteMapping("product/delete/{id}")
+	public ResponseEntity<?> deleteProduct(@PathVariable int id) throws ResourceNotFoundException {
+		productService.getProductById(id);
+		productService.deleteById(id);
+		return ResponseEntity.ok("Product deleted");
+	}
 }

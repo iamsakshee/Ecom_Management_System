@@ -3,18 +3,17 @@ package com.springboot.ecom.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.springboot.ecom.dto.CustomerShippingDetailsDto;
 import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
-import com.springboot.ecom.model.Order;
 import com.springboot.ecom.model.ShippingAddress;
 import com.springboot.ecom.repository.CustomerRepository;
 import com.springboot.ecom.repository.ShippingAddressRepository;
-import com.springboot.ecom.repository.UserRepository;
 
 @Service
 public class CustomerService {
@@ -24,6 +23,9 @@ public class CustomerService {
 
 	@Autowired
 	private ShippingAddressRepository shippingAddressRepository;
+	
+	
+	Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
 	public Customer validate(int id) throws ResourceNotFoundException {
 		Optional<Customer> optional = customerRepository.findById(id);

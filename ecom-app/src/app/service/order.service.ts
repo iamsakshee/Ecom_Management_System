@@ -12,7 +12,7 @@ export class OrderService{
 
     constructor(private httpClient: HttpClient) { }
 
-    purchaseProduct(customerId: number, productId: number, quantity: number): Observable<any> {
+    purchaseProduct(customerId: number, productId: number, quantity: number= 1): Observable<any> {
 
         const httpOptions = {
             headers: new HttpHeaders({

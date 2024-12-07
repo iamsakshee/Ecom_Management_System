@@ -18,6 +18,8 @@ export class ProductDetailComponent implements OnInit {
   product: any;  
   productId: any;
   customerId: any;
+  subTotal: any;
+  gst: any;
   username: string | null = localStorage.getItem('username');
   wishlist: any[] = [];
   msg: any;
@@ -75,7 +77,9 @@ export class ProductDetailComponent implements OnInit {
       name: this.product.name,
       price: this.product.price,
       quantity: quantity,
-      total: this.product.price * quantity,
+      subtotal: this.product.price,
+      gst: 0.18,
+      total: this.product.price * quantity * this.gst,
       image: this.product.image || "https://via.placeholder.com/100x100"
     };
     cart.push(productDetails);
@@ -83,23 +87,5 @@ export class ProductDetailComponent implements OnInit {
     
     this.router.navigateByUrl("/cart");
   }
-  // purchaseProduct() {
-  //   const quantity = this.product.quantity;
-  //   console.log('Customer ID:', this.customerId);  
-  //   console.log('Product ID:', this.productId);    
-  //   if (!this.customerId || !this.productId) {
-  //     alert('Invalid customer or product ID');
-  //     return; 
-  //   }
-  //   this.orderService.purchaseProduct(this.customerId, this.productId, quantity)
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         alert(response.msg);  
-  //         this.router.navigate(['/cart']);  
-  //       },
-  //       error: (error) => {
-  //         alert('Error: ' + error.error.msg);
-  //       }
-  //     });
-  // }
+ 
 }

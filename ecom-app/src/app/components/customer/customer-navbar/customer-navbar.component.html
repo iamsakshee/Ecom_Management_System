@@ -134,8 +134,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
               <li><a class="dropdown-item" [routerLink]="['/category', 1]">Earphones</a></li>
-              <li><a class="dropdown-item" href="#">Laptops</a></li>
-              <li><a class="dropdown-item" href="#">Cameras</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 202]">Laptops</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 203]">Cameras</a></li>
             </ul>
           </li>
 
@@ -144,9 +144,9 @@
               Clothing
             </a>
             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
-              <li><a class="dropdown-item" href="#">Men</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 152]">Men</a></li>
               <li><a class="dropdown-item" [routerLink]="['/category', 2]">Women</a></li>
-              <li><a class="dropdown-item" href="#">Kids wear</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 153]">Kids wear</a></li>
             </ul>
           </li>
 
@@ -156,9 +156,9 @@
               Home Appliances
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Refrigerators</a></li>
-              <li><a class="dropdown-item" href="#">Microwaves</a></li>
-              <li><a class="dropdown-item" href="#">Washing Machines</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Refrigerators</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Microwaves</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Washing Machines</a></li>
             </ul>
           </li>
           <!-- Kitchen -->
@@ -167,9 +167,9 @@
               Kitchen
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Cookware</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Cookware</a></li>
               <li><a class="dropdown-item" [routerLink]="['/category', 52]">Dining</a></li>
-              <li><a class="dropdown-item" href="#">Small Appliances</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Small Appliances</a></li>
             </ul>
           </li>
           <!-- Sports -->
@@ -178,22 +178,13 @@
               Sports
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Fitness Equipment</a></li>
-              <li><a class="dropdown-item" href="#">Outdoor Gear</a></li>
-              <li><a class="dropdown-item" href="#">Sportswear</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Fitness Equipment</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Outdoor Gear</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/category', 154]">Sportswear</a></li>
             </ul>
           </li>
           <!-- Essentials -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Essentials
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Groceries</a></li>
-              <li><a class="dropdown-item" href="#">Personal Care</a></li>
-              <li><a class="dropdown-item" href="#">Household Supplies</a></li>
-            </ul>
-          </li>
+         
         </ul>
         <!-- Search Bar -->
         <form class="d-flex search-bar me-3" role="search">
@@ -202,6 +193,8 @@
             <i class="bi bi-search"></i>
           </button>
         </form>
+
+        
         <!-- Cart, Wishlist, and Profile Buttons -->
         <div class="d-flex">
           <!-- Cart Icon -->

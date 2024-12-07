@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,12 +56,11 @@ public class ProductService {
 
         product.setCategory(category);
         product.setVendor(vendor);
-        product.setFeaturedRequest(FeaturedRequest.NOTMADE);
         return productRepository.save(product);
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     public Product getProductById(int id) throws ResourceNotFoundException {
@@ -72,11 +73,6 @@ public class ProductService {
 
     public Product updateProduct(Product existingProduct) {
         return productRepository.save(existingProduct);
-    }
-
-    public Product updateFeaturedStatus(Product product) {
-        product.setFeaturedRequest(FeaturedRequest.PENDING);
-        return productRepository.save(product);
     }
 
     public void deleteById(int id) {
@@ -115,7 +111,7 @@ public class ProductService {
 
     public ProductImage uploadImage(int productId, MultipartFile file) throws IOException, ResourceNotFoundException {
         System.out.println(file.getOriginalFilename());
-        String location = "C:Users/saksh/OneDrive/Desktop/java_angular_fsd/Angular/ecom-app/public/images";
+        String location = "C:/Users/saksh/OneDrive/Desktop/java_angular_fsd/Angular/ecom-app/public/images";
         Path path = Path.of(location, file.getOriginalFilename());
 
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -147,4 +143,9 @@ public class ProductService {
     public List<ProductImage> getAllProductImages() {
         return productImageRepository.findAll();
     }
+
+	public List<Product> getAllProducts() {
+		
+		return null;
+	}
 }

@@ -18,12 +18,12 @@
                         <p><strong>Price:</strong> Rs.{{ product.price }}</p>
                     </div>
                     <!-- Quantity Selection and Buy Now Button -->
-                    <div class="form-group mt-4">
+                    <!-- <div class="form-group mt-4">
                         <label for="quantity" class="font-weight-bold">Quantity</label>
                         <input type="number" id="quantity" [(ngModel)]="product.quantity"
                             class="form-control form-control-sm" min="1" [max]="product.stock"
                             style="border-radius: 5px; border: 1px solid rgb(141, 68, 219);" />
-                    </div>
+                    </div> -->
                     <div class="d-flex justify-content-center mt-4">
                         <button class="btn btn-lg" style="background-color: rgb(141, 68, 219); color: white;"
                             (click)="addToCart()">Add to Cart</button>

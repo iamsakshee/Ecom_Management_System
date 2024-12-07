@@ -1,6 +1,10 @@
 <div class="container-fluid mt-5">
+  
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
+      <div *ngIf="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
+      </div>
       <div class="card shadow-lg p-4 mb-5" style="border-radius: 15px; background-color: #f8f9fa;">
         <h2 class="text-center mb-4" style="font-family: 'Arial', sans-serif; color: #8D44DB; font-weight: 700;">Checkout</h2>
         
@@ -52,15 +56,19 @@
             <tr>
               <td colspan="3"></td>
               <td class="text-end"><h5>Subtotal</h5></td>
-              <td class="text-end"><h5><strong>Rs.{{ subtotal }}</strong></h5></td>
+              <td class="text-end"><h5><strong>Rs.{{ subTotal }}</strong></h5></td>
+            </tr>
+
+            <tr>
+              <td colspan="3"></td>
+              <td class="text-end"><h5>Total</h5></td>
+              <td class="text-end"><h5><strong>Rs.{{ total }}</strong></h5></td>
             </tr>
 
           </tbody>
         </table>
 
-        <div *ngIf="successMessage" class="alert alert-success mt-3">
-          {{ successMessage }}
-        </div>
+        
       </div>
     </div>
   </div>

@@ -14,7 +14,7 @@ public class Product {
     @Column(length = 500)
     private String description;
 
-    private String brand;
+   
 
     private double price;
 
@@ -26,8 +26,7 @@ public class Product {
     @ManyToOne
     private Category category;
 
-    @Enumerated(EnumType.STRING)
-    private FeaturedRequest featuredRequest;
+    
 
     public int getId() {
         return id;
@@ -53,13 +52,7 @@ public class Product {
         this.description = description;
     }
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+   
 
     public double getPrice() {
         return price;
@@ -85,13 +78,7 @@ public class Product {
         this.vendor = vendor;
     }
 
-    public FeaturedRequest getFeaturedRequest() {
-        return featuredRequest;
-    }
-
-    public void setFeaturedRequest(FeaturedRequest featuredRequest) {
-        this.featuredRequest = featuredRequest;
-    }
+   
 
     public Category getCategory() {
         return category;

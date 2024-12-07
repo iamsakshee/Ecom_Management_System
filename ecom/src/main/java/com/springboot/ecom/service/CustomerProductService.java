@@ -87,11 +87,12 @@ public class CustomerProductService {
 	                dto.setProduct_name(productName);
 	                dto.setProduct_price(productPrice);
 	                dto.setDate_of_purchase(dateOfPurchase);
+	                dto.setOrder_quantity(orderQuantity);
 	                orderMap.put(orderId, dto);
 	            }
 
 	            // Accumulate the quantities
-	            dto.setOrder_quantity(dto.getOrder_quantity() + orderQuantity);
+//	            dto.setOrder_quantity(dto.getOrder_quantity());
 	        }
 
 	        // Convert map values to a list

@@ -23,15 +23,15 @@ export class CustomerNavbarComponent {
     private productService: ProductService
   ) {
     // Fetch all products initially
-    this.productService.getAllProducts().subscribe({
-      next: (response) => {
-        this.allProducts = response; // Store all products in the allProducts array
-        this.searchResults = response; // Initially display all products
-      },
-      error: (error) => {
-        console.error('Error fetching products', error); // Handle error
-      }
-    });
+    // this.productService.getAllProducts().subscribe({
+    //   next: (response) => {
+    //     this.allProducts = response; // Store all products in the allProducts array
+    //     this.searchResults = response; // Initially display all products
+    //   },
+    //   error: (error) => {
+    //     console.error('Error fetching products', error); // Handle error
+    //   }
+    // });
   }
 
   logout() {

@@ -14,14 +14,16 @@ export class CartService {
   }
 
   // Add product to cart
-  addToCart(product: any, quantity: number = 1): void {
+  addToCart(product: any, quantity: number = 1, gst: number = 0.18): void {
     let cart = this.getCart();
     const productDetails = {
       productId: product.id,
       name: product.name,
       price: product.price,
       quantity: quantity,
-      total: product.price * quantity,
+      subTotal: product.price,
+      gst : 0.18,
+      total: product.price * quantity * gst,
       image: product.image || "https://via.placeholder.com/100x100"
     };
     
