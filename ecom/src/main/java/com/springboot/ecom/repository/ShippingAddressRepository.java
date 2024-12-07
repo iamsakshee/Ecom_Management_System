@@ -27,5 +27,6 @@ public interface ShippingAddressRepository extends JpaRepository<ShippingAddress
 
 	@Query("SELECT sa FROM ShippingAddress sa WHERE sa.customer.id = :customerId")
 	ShippingAddress findShippingAddressByCustomerId(@Param("customerId") int customerId);
-
+	
+	 
 }

@@ -96,10 +96,51 @@ public class ShippingAddressController {
       
     }
 	
+	@PostMapping("/customer/update/address/{customerId}")
+	public ResponseEntity<?> updateShippingAddress(
+	        @PathVariable int customerId,
+	        @RequestBody ShippingAddress newAddress,
+	        ResponseMessageDto dto) throws ResourceNotFoundException {
+
+	    // Validate customer
+	    Customer existingCustomer = customerService.validate(customerId);
+
+	    // Get existing shipping address
+	    ShippingAddress existingAddress = shippingAddressService.getByCustomerId(customerId);
+
+	    if (existingAddress == null) {
+	        throw new ResourceNotFoundException("Shipping address not found for customer ID: " + customerId);
+	    }
+
+	    // Update the fields
+	    if (newAddress.getAddressLine1() != null) 
+	        existingAddress.setAddressLine1(newAddress.getAddressLine1());
+
+	    if (newAddress.getAddressLine2() != null) 
+	        existingAddress.setAddressLine2(newAddress.getAddressLine2());
+
+	    if (newAddress.getCity() != null) 
+	        existingAddress.setCity(newAddress.getCity());
+
+	    if (newAddress.getState() != null) 
+	        existingAddress.setState(newAddress.getState());
+
+	    if (newAddress.getCountry() != null) 
+	        existingAddress.setCountry(newAddress.getCountry());
+
+	    if (newAddress.getZipCode() != 0) 
+	        existingAddress.setZipCode(newAddress.getZipCode());
+
+	    // Save updated address
+	    shippingAddressService.save(existingAddress);
+
+	    dto.setMsg("Shipping address updated successfully.");
+	    return ResponseEntity.ok(existingAddress);
+	}
 	
 	
-	// update
 	
+
 	
 
 	

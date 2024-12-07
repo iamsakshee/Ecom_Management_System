@@ -23,6 +23,7 @@ import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
 import com.springboot.ecom.model.Product;
 import com.springboot.ecom.model.User;
+import com.springboot.ecom.repository.ProductRepository;
 import com.springboot.ecom.service.CustomerService;
 import com.springboot.ecom.service.ProductService;
 import com.springboot.ecom.service.UserService;
@@ -39,6 +40,9 @@ public class CustomerController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ProductRepository productRepository;
 
 	@PostMapping("/customer/register")
 	public Customer registerCustomer(@RequestBody Customer customer, ResponseMessageDto dto) {
@@ -76,7 +80,7 @@ public class CustomerController {
 
 	}
 
-	@PutMapping("/customer/update/{id}")
+	@PostMapping("/customer/update/{id}")
 	public ResponseEntity<?> updateCustomer(@PathVariable int id, @RequestBody Customer newCustomer,
 			ResponseMessageDto dto) throws ResourceNotFoundException {
 
@@ -125,5 +129,11 @@ public class CustomerController {
 	public CustomerShippingDetailsDto getCustomerAndShippingDetailsByUsername(@RequestParam String username) {
 	    return customerService.getCustomerAndShippingDetailsByUsername(username);
 	}
+	
+	
+	 @GetMapping("/api/products/search")
+	    public List<Product> searchProducts(@RequestParam String query) {
+	        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
+	    }
 
 }

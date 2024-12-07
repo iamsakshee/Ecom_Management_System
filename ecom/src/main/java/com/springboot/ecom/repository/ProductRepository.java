@@ -19,4 +19,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p.id, p.name, p.price, p.stock FROM Product p")
 	List<Product> findAllProductFields();
+    
+    
+    List<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
+
 }
+
+

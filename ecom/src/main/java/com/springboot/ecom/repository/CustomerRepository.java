@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.springboot.ecom.model.Customer;
+import com.springboot.ecom.model.Order;
 import com.springboot.ecom.model.User;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
@@ -28,5 +29,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     @Query("SELECT c.id, c.name, c.email, c.phoneNumber FROM Customer c "
          + "JOIN c.user u WHERE u.username = :username")
     List<Object[]> findCustomerDetailsByUsername(@Param("username") String username);
+
+    
+    
 	
 }

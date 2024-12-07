@@ -56,6 +56,15 @@ public class ShippingAddressService {
 		
 		return shippingAddressRepository.findByCustomerId(customerId);
 	}
+	
+	
+	public ShippingAddress getByCustomerId(int customerId) {
+        return shippingAddressRepository.findByCustomerId(customerId);
+    }
+
+    public ShippingAddress save(ShippingAddress shippingAddress) {
+        return shippingAddressRepository.save(shippingAddress);
+    }
 
 	
 
