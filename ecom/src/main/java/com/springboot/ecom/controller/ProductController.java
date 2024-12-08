@@ -73,13 +73,44 @@ public class ProductController {
 
 	@GetMapping("/product/category/{categoryId}")
 	public ResponseEntity<?> getProductsByCategory(@PathVariable int categoryId) throws ResourceNotFoundException {
-		Set<Product> products = productService.getProductsByCategoryId(categoryId);
-		return ResponseEntity.ok(products);
+	    // Fetch all products by category ID
+	    List<Product> productList = productService.getProductsByCategoryId(categoryId);
+
+	    // Initialize a list to hold ProductResponseDto objects
+	    List<ProductResponseDto> listDto = new ArrayList<>();
+
+	    // Loop through each product and map it to a ProductResponseDto
+	    for (Product product : productList) {
+	        // Fetch all images for the current product
+	        List<ProductImage> imageList = productService.getAllProductImagesByProductId(product.getId());
+
+	        // Map product to ProductResponseDto
+	        ProductResponseDto dto = new ProductResponseDto();
+	        dto.setId(product.getId());
+	        dto.setName(product.getName());
+	        dto.setStock(product.getStock());
+	        dto.setPrice(product.getPrice());
+	        dto.setDescription(product.getDescription());
+
+	        // Filter and set product-specific images
+	        List<ProductImage> iList = imageList.stream()
+	                .filter(i -> i.getProduct().getId() == product.getId())
+	                .toList();
+	        dto.setImages(iList);
+
+	        // Add the DTO to the list
+	        listDto.add(dto);
+	    }
+
+	    // Return the list of ProductResponseDto objects
+	    return ResponseEntity.ok(listDto);
 	}
+
 
 	@GetMapping("/api/product/all")
 	public Page<ProductResponseDto> getAllProducts(@RequestParam(required = false, defaultValue = "0") String page,
-			@RequestParam(required = false, defaultValue = "1000000") String size) throws Exception{
+			@RequestParam(required = false, defaultValue = "1000000") String size,
+			@RequestParam(defaultValue = "") String searchKey) throws Exception{
 
 		Pageable pageable = null;
 
@@ -89,7 +120,7 @@ public class ProductController {
 			throw e;
 		}
 
-		Page<Product> pPage = productService.getAllProducts(pageable);
+		Page<Product> pPage = productService.getAllProducts(pageable, searchKey);
 		List<Product> pList = pPage.getContent();
 		List<ProductImage> imageList = productService.getAllProductImages();
 

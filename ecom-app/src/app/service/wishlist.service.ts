@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 export class WishlistService {
   private getWishlistApi = 'http://localhost:8082/api/wishlist'; 
   private addProductToWishlistApi = 'http://localhost:8082/api/wishlist';
+  private deleteProductFromWishlistApi = 'http://localhost:8082/wishlist/product/delete';
+
 
   constructor(private httpClient: HttpClient) {}
 
@@ -23,6 +25,12 @@ export class WishlistService {
       })
     };
     return this.httpClient.post(this.addProductToWishlistApi + "/" + customerId + "/" + productId, httpOptions)
+  }
+
+  deleteProductFromWishlist(productId: number): Observable<any> {
+    return this.httpClient.delete(this.deleteProductFromWishlistApi +"/" + productId);
+  
+
   }
 
 }

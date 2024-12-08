@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/orders/details/{cid}").hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/customer/update/{id}").hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/customer/update/address/{customerId}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/customer/add/review/{cid}/{pid}").hasAuthority("CUSTOMER")
+                        
 //                        .requestMatchers(HttpMethod.POST, "/api/wishlist/{customerId}/{productId}").hasAuthority("CUSTOMER")
                                                
                         .anyRequest().permitAll()

@@ -59,8 +59,16 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<Product> getAllProducts(Pageable pageable, String searchKey) {
+    	if(searchKey.equals(""))
+    	{
+    		 return productRepository.findAll(pageable);
+    	}else
+    	{
+    		return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchKey, searchKey, pageable);
+    	}
+    	
+       
     }
 
     public Product getProductById(int id) throws ResourceNotFoundException {
@@ -79,12 +87,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Set<Product> getProductsByCategoryId(int categoryId) throws ResourceNotFoundException {
+    public List<Product> getProductsByCategoryId(int categoryId) throws ResourceNotFoundException {
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category invalid "));
 
-        Set<Product> products = productRepository.getAllProductsByCategoryId(categoryId);
+        List<Product> products = productRepository.getAllProductsByCategoryId(categoryId);
         if (products == null || products.isEmpty()) {
             throw new ResourceNotFoundException("No products found for this category ");
         }
@@ -148,4 +156,6 @@ public class ProductService {
 		
 		return null;
 	}
+
+	
 }

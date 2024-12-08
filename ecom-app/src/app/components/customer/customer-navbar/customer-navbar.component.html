@@ -186,13 +186,21 @@
           <!-- Essentials -->
          
         </ul>
-        <!-- Search Bar -->
-        <form class="d-flex search-bar me-3" role="search">
-          <input class="form-control search-input me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex w-100" role="search" (submit)="onSearch($event)">
+          <input
+            type="search"
+            class="form-control search-input"
+            placeholder="Search for products..."
+            aria-label="Search"
+            [(ngModel)]="searchTerm"
+            name="searchTerm"
+          />
           <button class="btn search-btn" type="submit">
             <i class="bi bi-search"></i>
           </button>
         </form>
+        
+        
 
         
         <!-- Cart, Wishlist, and Profile Buttons -->

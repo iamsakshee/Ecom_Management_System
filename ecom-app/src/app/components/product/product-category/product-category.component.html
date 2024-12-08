@@ -6,13 +6,13 @@
    
     <div *ngIf="products.length; else noProducts">
       <div class="row">
-        <div class="col-md-4" *ngFor="let product of products">
-          <div class="card mb-4">
+        <div class="col-md-4 mt-4" *ngFor="let product of products">
+          <div class="card mb-4 mt-4">
             <!-- Product Image -->
-            <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200'" class="card-img-top"
-              alt="{{ product.name }}" />
+            <img [src]="product.images[0]?.path || 'https://via.placeholder.com/300x200'" class="img-fluid rounded mx-auto d-block"
+            alt="{{ product.name }}">
   
-            <div class="card-body">
+            <div class="card-body mt-4">
               <!-- Product Title -->
               <h5 class="card-title">{{ product.name }}</h5>
   
@@ -29,13 +29,55 @@
                   class="form-control form-control-sm" min="1" [max]="product.stock || 10"
                   style="border-radius: 5px; border: 1px solid rgb(141, 68, 219);" />
               </div> -->
+
+              <div class="d-flex justify-content-center mt-4">
+                <!-- View Details Button -->
+                <button class="btn btn-lg" [routerLink]="['/product', product.id]" 
+                        style="background-color: rgb(141, 68, 219); color: white;">View Details
+                </button>
+              </div>            
   
               <!-- Buy Now Button -->
               <div class="d-flex justify-content-center mt-4">
                 <button class="btn btn-lg" style="background-color: rgb(141, 68, 219); color: white;"
                     (click)="addToCart(product)">Add to Cart</button>
+
+                    <div class="d-flex justify-content-center mt-4">
+                      <button class="btn btn-lg" style="background-color: rgb(141, 68, 219); color: white;"
+                          (click)="openReviewModal()">Add review</button>
+                  </div>
             </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" *ngIf="showModal" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Your Review</h5>
+            <button type="button" class="close" (click)="closeReviewModal()">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="rating">Rating(Rate between 1-5, 1 being the lowest and 5 being the highest)</label>
+              <input type="number" id="rating" [(ngModel)]="rating" name="rating" class="form-control" min="1" max="5" required />
+            </div>
+            <div class="form-group">
+              <label for="reviewText">Review</label>
+              <textarea id="reviewText" [(ngModel)]="reviewText" name="reviewText" class="form-control" rows="4" required></textarea>
+            </div>
+            <!-- Displaying Success/Error Messages -->
+            <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeReviewModal()">Close</button>
+            <button type="button" class="btn" (click)="submitReview()" [disabled]="!rating || !reviewText"  style="background-color: rgb(141, 68, 219); color: white;">Submit</button>
           </div>
         </div>
       </div>

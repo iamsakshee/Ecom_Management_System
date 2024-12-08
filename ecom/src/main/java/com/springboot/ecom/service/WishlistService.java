@@ -1,11 +1,13 @@
 package com.springboot.ecom.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.ecom.exception.ResourceNotFoundException;
 import com.springboot.ecom.model.Customer;
 import com.springboot.ecom.model.Product;
 import com.springboot.ecom.model.ProductWishlist;
@@ -80,6 +82,22 @@ public class WishlistService {
 	                .collect(Collectors.toList());
 	    }
 
+
+	 public Wishlist validate(int id) throws ResourceNotFoundException {
+			Optional<Wishlist> optional = wishlistRepository.findById(id);
+			if (optional.isEmpty())
+				throw new ResourceNotFoundException("Wishlist id is invalid");
+			return optional.get();
+		}
+
+
+	public void deleteWishlistProductById(int pid) {
+		productWishlistRepository.deleteWishlistProductById(pid);
+		
+	}
+
+
+	
 
 	
 	

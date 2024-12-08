@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CustomerService } from '../../../service/customer.service';
 import { ProductService } from '../../../service/product.service';
@@ -16,6 +16,8 @@ export class CustomerNavbarComponent {
   searchQuery: string = ''; // Bind to the search input field
   searchResults: any[] = []; // To store search results
   allProducts: any[] = []; // Store all products
+  @Output() searchEvent = new EventEmitter<string>(); // To emit the search term
+  searchTerm: string = '';
 
   constructor(
     private router: Router,
@@ -78,16 +80,9 @@ export class CustomerNavbarComponent {
     }
   }
 
-  onSearch() {
-    if (this.searchQuery.trim()) {
-      // Filter products based on the search query
-      this.searchResults = this.allProducts.filter(product =>
-        product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    } else {
-      // If the search query is empty, show all products
-      this.searchResults = this.allProducts;
-    }
+  onSearch(event: Event): void {
+    event.preventDefault(); // Prevent page reload
+    this.searchEvent.emit(this.searchTerm); // Emit the search term to parent
   }
 }
  

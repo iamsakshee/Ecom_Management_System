@@ -29,6 +29,7 @@ export class CustomerCartComponent implements OnInit {
   // Load the cart from local storage (or an empty array if nothing is saved)
   loadCart() {
     const storedCart = localStorage.getItem('cart');
+    console.log(storedCart)
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     } else {

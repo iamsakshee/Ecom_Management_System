@@ -2,4 +2,21 @@
 .dropdown-item, .nav-link, .icon-btn, .profile-pic-btn, .navbar-brand {
     cursor: pointer;
   }
+  .search-bar {
+    width: 100%; /* Make the search bar stretch to the full width of its container */
+  }
+  
+  .search-input {
+    width: 100%; /* Adjust this to a larger percentage or use a fixed width */
+    max-width: 500px; /* Set a maximum width to prevent it from getting too large */
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(141, 68, 219, 1);
+    border-color: rgba(141, 68, 219, 1);
+  }
   

@@ -7,13 +7,13 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-wishlist',
-  imports: [ CustomerNavbarComponent, NgFor, NgIf],
+  imports: [CustomerNavbarComponent, NgFor, NgIf],
   templateUrl: './product-wishlist.component.html',
   styleUrl: './product-wishlist.component.css'
 })
-export class ProductWishlistComponent  implements OnInit {
+export class ProductWishlistComponent implements OnInit {
 
-  product: any; 
+  product: any;
   wishlist: any[] = [];
   successMessage: string = '';
   errorMessage: string = '';
@@ -21,8 +21,8 @@ export class ProductWishlistComponent  implements OnInit {
   constructor(
     private wishlistService: WishlistService,
     private customerService: CustomerService,
-    private router:Router
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     const username = localStorage.getItem('username'); // Retrieve username from local storage
@@ -36,6 +36,16 @@ export class ProductWishlistComponent  implements OnInit {
           this.wishlistService.getWishlistProducts(customerId).subscribe({
             next: (products) => {
               this.wishlist = products; // Populate wishlist with data from API
+
+              // Loop through each product and update image paths
+              this.wishlist.forEach((product: any) => {
+                if (product.images && product.images.length > 0) {
+                  product.images.forEach((image: any) => {
+                    image.path = './images/' + image.fileName; // Update image path
+                  });
+                }
+              });
+
             },
             error: (err) => {
               this.errorMessage = 'Failed to load wishlist. Please try again.';
@@ -58,10 +68,10 @@ export class ProductWishlistComponent  implements OnInit {
   addToCart(item: any): void {
     // Check if the item already exists in the cart
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    
+
     // Find if the item already exists in the cart by matching product ID
     const existingProduct = cart.find((cartItem: any) => cartItem.productId === item.id);
-  
+
     if (existingProduct) {
       // Update the quantity if the product already exists
       existingProduct.quantity += 1;
@@ -78,19 +88,29 @@ export class ProductWishlistComponent  implements OnInit {
       };
       cart.push(productDetails);
     }
-  
+
     // Save the updated cart to local storage
     localStorage.setItem('cart', JSON.stringify(cart));
-  
+
     // Redirect to the cart page
     this.router.navigateByUrl("/cart");
   }
-  
 
+
+  // Method to remove product from wishlist and show message
   removeFromWishlist(item: any): void {
-    this.wishlist = this.wishlist.filter((product) => product.id !== item.id);
-    alert(`${item.name} has been removed from your wishlist.`);
+    this.wishlistService.deleteProductFromWishlist(item.id).subscribe({
+      next: () => {
+        this.wishlist = this.wishlist.filter((product) => product.id !== item.id); // Remove product from the list
+        this.successMessage = `Product removed from your wishlist.`; // Display success message
+        setTimeout(() => (this.successMessage = ''), 5000); // Clear message after 5 seconds
+      },
+      error: () => {
+        this.errorMessage = 'Failed to remove the product from the wishlist. Please try again.'; // Display error message
+        setTimeout(() => (this.errorMessage = ''), 5000); // Clear message after 5 seconds
+      }
+    });
   }
+  
 }
 
- 

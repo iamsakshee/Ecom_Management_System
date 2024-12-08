@@ -22,9 +22,10 @@ export class DashboardPageComponent implements OnInit {
   errorMessage: string = '';
   data:any[] = []
   page:number=0;
-  size:number=7;
+  size:number=8;
   totalElements: number = 0;
   pageArray:any[] =[];
+  searchKey: string = '';
 
   
   constructor(private productService: ProductService, 
@@ -35,11 +36,12 @@ export class DashboardPageComponent implements OnInit {
   ngOnInit(): void {
    
     this.getAllProducts();
+    
   }
 
   // Fetch all products
-  getAllProducts(): void {
-    this.productService.getAllProducts(this.page,this.size).subscribe({
+  getAllProducts(searchKey:String = ""): void {
+    this.productService.getAllProducts(this.page,this.size, searchKey).subscribe({
       next: (resp) => {
         this.data = resp.content; // Assuming 'content' contains the products
       this.products = resp.content; 
@@ -107,6 +109,11 @@ export class DashboardPageComponent implements OnInit {
   onClick(i:number){
      this.page = i
      this.getAllProducts()
+  }
+
+  onSearch(searchTerm: string): void {
+    this.searchKey = searchTerm; // Update the searchKey
+    this.getAllProducts(this.searchKey); // Fetch filtered products
   }
 }
 

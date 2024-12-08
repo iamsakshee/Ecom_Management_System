@@ -24,7 +24,7 @@ export class CartService {
       subTotal: product.price,
       gst : 0.18,
       total: product.price * quantity * gst,
-      image: product.image || "https://via.placeholder.com/100x100"
+      images: product.images || "https://via.placeholder.com/100x100"
     };
     
     // Check if the product already exists in the cart

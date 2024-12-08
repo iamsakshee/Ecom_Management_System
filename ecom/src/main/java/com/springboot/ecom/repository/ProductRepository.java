@@ -1,6 +1,9 @@
 package com.springboot.ecom.repository;
 
 import com.springboot.ecom.model.Product;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,7 +18,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Set<Product> findProductsByVendor(String username);
 
     @Query("select p from Product p where p.category.id=:categoryId")
-    Set<Product> getAllProductsByCategoryId(int categoryId);
+    List<Product> getAllProductsByCategoryId(int categoryId);
+    
+    Page<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase
+    				(String key1, String key2, Pageable pageable);
 
     
 }
