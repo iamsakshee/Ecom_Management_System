@@ -18,7 +18,7 @@ import com.springboot.ecom.model.Delivery;
 import com.springboot.ecom.service.DeliveryService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = "http://localhost:4200")
 public class DeliveryController {
 
 	@Autowired
@@ -48,5 +48,13 @@ public class DeliveryController {
 		dto.setMsg("Delivery Deleted");
 		return ResponseEntity.ok(dto);
 	}
+	
+	@PostMapping("/delivery/addDetails")
+	public ResponseEntity<?> addDeliveryDetails(@RequestBody Delivery delivery) {
+	        deliveryService.saveDelivery(delivery); // Method to save delivery details in DB
+	        return ResponseEntity.ok("Delivery details added successfully");
+
+	}
+
 }
 	

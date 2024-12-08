@@ -20,7 +20,7 @@ public class Manager {
 	@Column(nullable = false)
     private String name;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String contact;
     
     @ManyToOne
@@ -74,6 +74,7 @@ public class Manager {
 		return "Manager [id=" + id + ", name=" + name + ", contact=" + contact + ", warehouse=" + warehouse + ", user="
 				+ user + "]";
 	}
+
 
 	
 }

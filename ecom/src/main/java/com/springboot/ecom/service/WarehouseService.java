@@ -39,5 +39,9 @@ import com.springboot.ecom.repository.WarehouseRepository;
 			return optional.get();
 			
 		}
+
+		public Warehouse findById(int id) {
+			return warehouseRepository.findById(id).get();
+		}
 }
 

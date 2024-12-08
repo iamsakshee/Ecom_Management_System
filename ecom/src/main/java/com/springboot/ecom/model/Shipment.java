@@ -9,7 +9,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -20,6 +19,12 @@ public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    
+    @Column(nullable = false)
+    private String customerName;
+    
+    @Column(nullable = false)
+    private String orderId;
 
     @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
@@ -29,6 +34,22 @@ public class Shipment {
 
     @OneToOne
     private ShippingAddress shippingAddress;
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
 
 	public int getId() {
 		return id;
@@ -62,7 +83,6 @@ public class Shipment {
 		this.shippingAddress = shippingAddress;
 	}
 
-	
 	@Override
 	public String toString() {
 		return "Shipment [id=" + id + ", status=" + status + ", deliveryDate=" + deliveryDate + ", shippingAddress="

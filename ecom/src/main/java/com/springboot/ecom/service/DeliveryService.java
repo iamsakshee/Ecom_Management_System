@@ -39,5 +39,10 @@ import com.springboot.ecom.repository.DeliveryRepository;
 			return optional.get();
 			
 		}
+
+		public void saveDelivery(Delivery delivery) {
+			deliveryRepository.save(delivery);
+			
+		}
 }
 

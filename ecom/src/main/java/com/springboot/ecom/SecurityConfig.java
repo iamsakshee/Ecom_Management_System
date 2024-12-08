@@ -32,8 +32,17 @@ public class SecurityConfig {
 		 .authorizeHttpRequests(authorize -> authorize
 				 	.requestMatchers(HttpMethod.POST, "/api/token").permitAll()
 				 	.requestMatchers(HttpMethod.GET, "/auth/user").authenticated()
-				 	 .requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll() 
-				 	.requestMatchers("/manager/**", "/delivery/**","/warehouse/**","/shipment/**").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll() 
+				 	.requestMatchers(HttpMethod.GET, "/shipment/all").hasAuthority("MANAGER") 
+				 	.requestMatchers(HttpMethod.POST, "/manager/add").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.GET,"/manager/username").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.GET,"/status/{status}").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.GET,"/warehouse/all").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.PUT,"/api/shipment/all").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.PUT,"/shipment/update-status/{id}").hasAuthority("MANAGER")
+				 	.requestMatchers(HttpMethod.PUT,"/update/manager").hasAuthority("MANAGER")
+				 	
+				 		
 				 	
 				.anyRequest().permitAll()
 			) 

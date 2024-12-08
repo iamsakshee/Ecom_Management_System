@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.springboot.ecom.enums.Role;
@@ -21,6 +22,13 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder passEncoder;
+	
+	private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 	
 	public User signUp(User user) throws InvalidUsernameException {
 		Optional<User> optional = userRepository.findByUsername(user.getUsername());
@@ -48,4 +56,8 @@ public class UserService {
 		
 		return optional.get();
 	}
+	
+	public User findById(int id) {
+        return userRepository.findById(id).orElse(null); 
+    }
 }

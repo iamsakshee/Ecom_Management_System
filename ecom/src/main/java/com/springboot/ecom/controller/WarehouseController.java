@@ -18,7 +18,7 @@ import com.springboot.ecom.model.Warehouse;
 import com.springboot.ecom.service.WarehouseService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = "http://localhost:4200")
 public class WarehouseController {
 
 	@Autowired

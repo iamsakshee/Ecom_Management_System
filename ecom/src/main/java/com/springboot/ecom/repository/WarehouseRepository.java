@@ -7,8 +7,4 @@ import com.springboot.ecom.model.Warehouse;
 
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, Integer> {
-	@Override
-	default Warehouse getById(Integer id) {
-		return null;
-	}
 }

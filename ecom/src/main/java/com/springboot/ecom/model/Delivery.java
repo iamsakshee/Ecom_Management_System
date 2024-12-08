@@ -32,17 +32,25 @@ import jakarta.persistence.Table;
 	    private String proofId;
 	
 	    @OneToOne
-	    private Shipment shipment;
+	    private Shipment shipmentAddress;
 	    
 	    @ManyToOne
-	    private Warehouse warehouse;
+	    private Warehouse warehouseId;
 
-		public Warehouse getWarehouse() {
-			return warehouse;
+		public Shipment getShipmentAddress() {
+			return shipmentAddress;
 		}
 
-		public void setWarehouse(Warehouse warehouse) {
-			this.warehouse = warehouse;
+		public void setShipmentAddress(Shipment shipmentAddress) {
+			this.shipmentAddress = shipmentAddress;
+		}
+
+		public Warehouse getWarehouseId() {
+			return warehouseId;
+		}
+
+		public void setWarehouseId(Warehouse warehouseId) {
+			this.warehouseId = warehouseId;
 		}
 
 		public int getId() {
@@ -85,22 +93,15 @@ import jakarta.persistence.Table;
 			this.proofId = proofId;
 		}
 
-		public Shipment getShipment() {
-			return shipment;
-		}
-
-		public void setShipment(Shipment shipment) {
-			this.shipment = shipment;
-		}
-
 		@Override
 		public String toString() {
 			return "Delivery [id=" + id + ", deliveredToPerson=" + deliveredToPerson + ", deliveredByPerson="
 					+ deliveredByPerson + ", deliveryDate=" + deliveryDate + ", proofId=" + proofId
-					+ ", shipment=" + shipment + ", warehouse=" + warehouse
-					+ "]";
+					+ ", shipmentAddress=" + shipmentAddress + ", warehouseId=" + warehouseId + "]";
 		}
 
+		
+	
 		
 	        
 }
