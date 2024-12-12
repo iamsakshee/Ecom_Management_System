@@ -45,7 +45,7 @@ export class CustomerService {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       }),
     };
-    return this.httpClient.get(`${this.getAllCustomersApi}/${customerId}`, httpOptions);
+    return this.httpClient.get(this.getAllCustomersApi + "/" + customerId , httpOptions);
   }
 
   addShippingAddress(customerId: number, shippingAddress: any): Observable<any> {
@@ -65,7 +65,7 @@ export class CustomerService {
       })
     };
 
-    return this.httpClient.post(`${this.addShippingAddressApi}/${customerId}`, postObj, httpOptions);
+    return this.httpClient.post(this.addShippingAddressApi + "/" + customerId, postObj, httpOptions);
   }
 
   public getCustomerDetailsByUsername(username: any) : Observable<any>{
@@ -79,7 +79,7 @@ public customerUpdate(customerId:any): Observable<any>{
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     }),
   };
-  return this.httpClient.get(this.customerUpdateApi +"/" + customerId, httpOptions);
+  return this.httpClient.put(this.customerUpdateApi +"/" + customerId, httpOptions);
 }
 public shippingAddressUpdate(customerId:any): Observable<any>{
 
@@ -88,7 +88,7 @@ public shippingAddressUpdate(customerId:any): Observable<any>{
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     }),
   };
-  return this.httpClient.get(this.shippingAddressUpdateApi +"/" + customerId, httpOptions);
+  return this.httpClient.post(this.shippingAddressUpdateApi +"/" + customerId, httpOptions);
 }
 
 }

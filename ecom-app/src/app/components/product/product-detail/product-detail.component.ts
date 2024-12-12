@@ -47,7 +47,6 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(p => {
       this.productId = p.get('id');
-      // this.productId = +this.route.snapshot.paramMap.get('id')!;
       this.productService.getProductById(this.productId).subscribe({
         next: (data) => {
           this.product = data[0];
@@ -55,7 +54,6 @@ export class ProductDetailComponent implements OnInit {
             i.path = './images/' + i.fileName;
           });
 
-          this.product.description = this.product.description; // API response is an array, take the first item
         },
         error: (error) => {
           console.error('Error fetching product details', error);

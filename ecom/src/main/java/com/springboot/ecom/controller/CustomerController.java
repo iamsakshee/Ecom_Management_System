@@ -52,7 +52,6 @@ public class CustomerController {
         customer.setUser(user);
 
         logger.info("Registering customer: {}", customer);
-        // its used to insert the customer details i.e. to register customer
         return customerService.insert(customer);
     }
 

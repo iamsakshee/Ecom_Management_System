@@ -19,10 +19,7 @@ public class CustomerProductController {
 	@Autowired
 	private CustomerProductService customerProductService;
 	
-	 @GetMapping("/orders/details")
-	    public List<OrderResponseDto> getAllOrdersWithCustomerAndProductDetails() {
-	        return customerProductService.getAllOrdersWithCustomerAndProductDetails();
-	    }
+	
 
 	 @GetMapping("/orders/details/{cid}")
 	    public List<OrderResponseDto> getAllOrdersWithCustomerAndProductDetails1(@PathVariable int cid) {

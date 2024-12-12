@@ -43,8 +43,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/customer/update/{id}").hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/customer/update/address/{customerId}").hasAuthority("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/customer/add/review/{cid}/{pid}").hasAuthority("CUSTOMER")
-                        
-//                        .requestMatchers(HttpMethod.POST, "/api/wishlist/{customerId}/{productId}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/vendor/add").hasAuthority("VENDOR")
+                        .requestMatchers(HttpMethod.GET, "/product-images/{productId}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/products-with-images/{vendorId}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/api/product/image/upload/{pid}").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/products/vendor/all").hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, "/product/getProduct/{productId}").hasAuthority("CUSTOMER")
                                                
                         .anyRequest().permitAll()
                 )

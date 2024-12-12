@@ -33,7 +33,7 @@ export class SignupComponent {
       },
       error: (err)=>{
         console.log(err)
-        this.errorMsg = err.msg; 
+        this.errorMsg = 'Username already in use!!'; 
       }
     })
    

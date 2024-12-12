@@ -15,7 +15,7 @@ export class AddDetailsComponent implements OnInit {
   successMsg: string | undefined;
   errorMsg: string | undefined;
   customerForm: FormGroup;
-  customerId: number | undefined; // To store the registered customer's ID
+  customerId: number | undefined; 
   customer: any;
 
   constructor(private router: Router, private customerService: CustomerService) {

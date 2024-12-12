@@ -1,5 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +10,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  
+
 </head>
+
 <body>
 
-<style>
+  <style>
     .navbar-dark-custom {
       background-color: #212529;
       transition: all 0.3s ease;
@@ -47,13 +50,17 @@
       position: absolute;
       left: 0 !important;
       right: auto !important;
-      display: none; /* Hidden by default */
-      min-width: 180px; /* Adjust to your preference */
-      transform: translateX(-50px); /* Shift left to avoid overflow */
+      display: none;
+      /* Hidden by default */
+      min-width: 180px;
+      /* Adjust to your preference */
+      transform: translateX(-50px);
+      /* Shift left to avoid overflow */
     }
 
     .dropdown:hover .dropdown-menu {
-      display: block; /* Show on hover */
+      display: block;
+      /* Show on hover */
     }
 
     .dropdown-item {
@@ -66,14 +73,18 @@
     }
 
     .search-bar {
-      width: 100%; /* Make the search bar stretch to the full width of its container */
+      width: 100%;
+      /* Make the search bar stretch to the full width of its container */
     }
 
     .search-input {
-      width: 80%; /* Ensure the input takes the full width of the search bar */
+      width: 80%;
+      /* Ensure the input takes the full width of the search bar */
       border-radius: 20px;
-      padding: 10px 20px; /* Adjust padding to maintain size */
-      font-size: 1.1rem; /* Adjust the font size for readability */
+      padding: 10px 20px;
+      /* Adjust padding to maintain size */
+      font-size: 1.1rem;
+      /* Adjust the font size for readability */
     }
 
     .search-input:focus {
@@ -98,7 +109,8 @@
       background-color: transparent;
       border: none;
       color: white;
-      margin-left: 15px; /* Space between icons */
+      margin-left: 15px;
+      /* Space between icons */
     }
 
     .icon-btn:hover {
@@ -113,20 +125,25 @@
       transform: scale(1.05);
     }
 
-    .dropdown-item, .nav-link, .icon-btn, .profile-pic-btn, .navbar-brand{
+    .dropdown-item,
+    .nav-link,
+    .icon-btn,
+    .profile-pic-btn,
+    .navbar-brand {
       cursor: pointer;
     }
   </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark-custom shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-dark-custom shadow-sm">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold text-white" (click)="navigatetodashboard()">Ecom</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          
+
           <!-- Electronics -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="electronicsDropdown" role="button" aria-expanded="false">
@@ -184,25 +201,19 @@
             </ul>
           </li>
           <!-- Essentials -->
-         
+
         </ul>
         <form class="d-flex w-100" role="search" (submit)="onSearch($event)">
-          <input
-            type="search"
-            class="form-control search-input"
-            placeholder="Search for products..."
-            aria-label="Search"
-            [(ngModel)]="searchTerm"
-            name="searchTerm"
-          />
+          <input type="search" class="form-control search-input" placeholder="Search for products..."
+            aria-label="Search" [(ngModel)]="searchTerm" name="searchTerm" />
           <button class="btn search-btn" type="submit">
             <i class="bi bi-search"></i>
           </button>
         </form>
-        
-        
 
-        
+
+
+
         <!-- Cart, Wishlist, and Profile Buttons -->
         <div class="d-flex">
           <!-- Cart Icon -->
@@ -210,12 +221,13 @@
             <i class="bi bi-cart-fill fs-4"></i>
           </button>
           <!-- Wishlist Icon -->
-          <button class="icon-btn"  (click)="navigateToWishlist()" >
+          <button class="icon-btn" (click)="navigateToWishlist()">
             <i class="bi bi-heart-fill fs-4"></i>
           </button>
           <!-- Profile Icon -->
           <div class="dropdown">
-            <button class="btn profile-pic-btn me-2" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn profile-pic-btn me-2" id="profileDropdown" data-bs-toggle="dropdown"
+              aria-expanded="false">
               <i class="bi bi-person-circle fs-4 text-white"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
@@ -230,4 +242,5 @@
   </nav>
 
 </body>
+
 </html>

@@ -23,7 +23,13 @@ export const routes: Routes = [
         {
             path: 'add-details', component:AddDetailsComponent
         },
-
+        {
+            path: '', component: DashboardPageComponent, children:[
+                {
+                    path: 'customer', component: CustomerPageComponent
+                }
+            ]
+        },
         {
             path:'dashboard', component: DashboardPageComponent
         },

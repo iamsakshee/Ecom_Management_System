@@ -5,10 +5,11 @@ import { OrderService } from '../../../service/order.service';
 import { CartService } from '../../../service/cart.service';
 import { CustomerService } from '../../../service/customer.service';
 import { ProductService } from '../../../service/product.service';
+import { CustomerNavbarComponent } from "../../customer/customer-navbar/customer-navbar.component";
 
 @Component({
   selector: 'app-product-checkout',
-  imports: [NgIf],
+  imports: [NgIf, CustomerNavbarComponent],
   templateUrl: './product-checkout.component.html',
   styleUrl: './product-checkout.component.css'
 })

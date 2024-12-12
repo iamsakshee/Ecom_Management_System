@@ -59,12 +59,12 @@ export class LoginComponent {
               }
             },
             error: (err) => {
-              this.errorMsg = err.error.msg;
+              this.errorMsg = "Bad credentials!!";
             },
           });
         },
         error: (err) => {
-          this.errorMsg = err.error.msg;
+          this.errorMsg = "Bad credentials!!";
         },
       });
   }

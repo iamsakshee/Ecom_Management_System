@@ -20,9 +20,9 @@ export class OrderService{
             })
           };
 
-        const url = `${this.purchaseProductApi}/${customerId}/${productId}?quantity=${quantity}`;
-        return this.httpClient.post(url, {}, httpOptions);
-      }
+        return this.httpClient.post(this.purchaseProductApi +"/" + customerId + "/" + productId + "?quantity=" + quantity,{}, httpOptions )  
+
+        }
 
     public getOrdersByCustomerId(customerId: any){
       return this.httpClient.get(this.getOrderByCustomerIdApi + "/" + customerId)
