@@ -6,6 +6,7 @@ import { CartService } from '../../../service/cart.service';
 import { CustomerService } from '../../../service/customer.service';
 import { ProductService } from '../../../service/product.service';
 import { CustomerNavbarComponent } from "../../customer/customer-navbar/customer-navbar.component";
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-product-checkout',
@@ -15,9 +16,9 @@ import { CustomerNavbarComponent } from "../../customer/customer-navbar/customer
 })
 export class ProductCheckoutComponent implements OnInit {
 
-  customerId: number | null = null;
-  productId: number | null = null;
-  quantity: number | null = null;
+  customerId: any;
+  productId: any;
+  quantity: any;
   username: string | null = null; // Assuming you store the username in local storage
   successMessage: any;
   subTotal: any;
@@ -58,6 +59,7 @@ export class ProductCheckoutComponent implements OnInit {
     if (this.username) {
       this.fetchCustomerIdByUsername(this.username);
     }
+    
   }
 
 
@@ -75,31 +77,83 @@ export class ProductCheckoutComponent implements OnInit {
   }
 
   // Handle product purchase
-  processPayment(): void {
-    console.log('customerId:', this.customerId);
-    console.log('productId:', this.productId);
-    console.log('quantity:', this.quantity);
+  
+// processPayment(): void {
+//   console.log('customerId:', this.customerId);
+//   console.log('productId:', this.productId);
+//   console.log('quantity:', this.quantity);
 
-    // Ensure customerId, productId, and quantity are available
-    if (!this.customerId || !this.productId || !this.quantity) {
-      alert('Invalid customer, product ID, or quantity.');
-      return;
-    }
+//   if (!this.customerId || !this.productId || !this.quantity) {
+//     alert('Invalid customer, product ID, or quantity.');
+//     return;
+//   }
 
-    console.log('Customer ID:', this.customerId);
-    console.log('Product ID:', this.productId);
-    console.log('Quantity:', this.quantity);
+//   this.orderService.purchaseProduct(this.customerId, this.productId, this.quantity)
+//     .subscribe({
+//       next: (response: any) => {
+//         this.successMessage = "Product purchased successfully!";
+//         console.log(response);
 
-    // Call the purchase service to process the order
-    this.orderService.purchaseProduct(this.customerId, this.productId, this.quantity)
-      .subscribe({
-        next: (response: any) => {
-          this.successMessage = response.msg;
-          console.log(response)
-        },
-        error: (error) => {
+//         // Save order details in local storage for the invoice page
+//         localStorage.setItem('invoiceData', JSON.stringify({
+//           productId: this.productId,
+//           quantity: this.quantity,
+//           total: this.total
+//         }));
 
-        }
-      });
+//         // Redirect to invoice page after a delay
+//         setTimeout(() => {
+//           this.router.navigate(['/invoice']);
+//         }, 2000);
+//       },
+//       error: (error) => {
+//         console.error('Error processing payment:', error);
+//       }
+//     });
+// }
+
+processPayment(): void {
+  console.log('customerId:', this.customerId);
+  console.log('productId:', this.productId);
+  console.log('quantity:', this.quantity);
+
+  if (!this.customerId || !this.productId || !this.quantity) {
+    alert('Invalid customer, product ID, or quantity.');
+    return;
   }
+
+  this.customerService.getCustomerDetailsByUsername(this.username!).subscribe({
+    next: (customerData: any) => {
+      this.orderService.purchaseProduct(this.customerId, this.productId, this.quantity)
+        .subscribe({
+          next: (response: any) => {
+            this.successMessage = "Product purchased successfully!";
+            console.log(response);
+
+            // Save order details in local storage for the invoice page
+            localStorage.setItem('invoiceData', JSON.stringify({
+              productId: this.productId,
+              quantity: this.quantity,
+              total: this.total,
+              customerName: customerData.name, // Store name
+              shippingAddress: customerData.shippingAddress // Store address
+            }));
+
+            // Redirect to invoice page after a delay
+            setTimeout(() => {
+              this.router.navigate(['/invoice']);
+            }, 2000);
+          },
+          error: (error) => {
+            console.error('Error processing payment:', error);
+          }
+        });
+    },
+    error: (error) => {
+      console.error('Error fetching customer details:', error);
+    }
+  });
+}
+
+
 }

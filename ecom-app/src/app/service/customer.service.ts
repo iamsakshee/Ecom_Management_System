@@ -72,6 +72,9 @@ export class CustomerService {
     return this.httpClient.get(this.getCustomerDetailsByUsernameApi + '?username=' + username)
 }
 
+
+
+
 public customerUpdate(customerId:any): Observable<any>{
 
   const httpOptions = {

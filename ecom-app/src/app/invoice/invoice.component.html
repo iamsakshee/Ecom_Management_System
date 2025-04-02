@@ -1,0 +1,29 @@
+<div class="invoice-container" #invoiceContent>
+  <div class="invoice-card">
+    <h2 class="invoice-title">Invoice</h2>
+
+    <div class="invoice-section">
+      <p><strong>Customer Name:</strong> {{ customerName }}</p>
+      <p><strong>Shipping Address:</strong> {{ shippingAddress }}</p>
+    </div>
+
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ productDetails.productName || "Unknown Product" }}</td>
+          <td>{{ productDetails.quantity }}</td>
+          <td>₹{{ productDetails.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="download-btn" (click)="generatePDF()">Download Invoice</button>
+  </div>
+</div>

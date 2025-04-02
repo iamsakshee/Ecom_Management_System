@@ -12,6 +12,7 @@ import { ProductCategoryComponent } from './components/product/product-category/
 import { ProductWishlistComponent } from './components/product/product-wishlist/product-wishlist.component';
 import { ProductCheckoutComponent } from './components/product/product-checkout/product-checkout.component';
 import { CustomerMyorderComponent } from './components/customer/customer-myorder/customer-myorder.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 export const routes: Routes = [
 
         {
@@ -49,7 +50,10 @@ export const routes: Routes = [
             path: 'wishlist', component: ProductWishlistComponent
         },
         {
-            path: 'checkout', component: ProductCheckoutComponent
+            path: 'checkout', component: ProductCheckoutComponent 
+        },
+        {   path: 'invoice', component: InvoiceComponent 
+
         },
         {
             path: 'order/:customerId', component: CustomerMyorderComponent
